@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DebugAssert</name>
+    </assembly>
+    <members>
+        <member name="T:DebugAssert.Log">
+            <summary>
+                日记文件，用来记录出错的数据内容
+            </summary>
+        </member>
+        <member name="M:DebugAssert.Log.WriteLog(System.String,System.String)">
+            <summary>
+                写日记文本，追加的模式
+            </summary>
+        </member>
+        <member name="M:DebugAssert.Log.WriteLog(System.Windows.Forms.RichTextBox@,System.String)">
+            <summary>
+            </summary>
+            <param name="rtb"></param>
+            <param name="strmessage"></param>
+        </member>
+        <member name="M:DebugAssert.Log.WriteLog(System.String,System.Exception)">
+            专用于记录异常信息
+            <summary>
+            专用于记录异常信息
+            </summary>
+            <param name="objectName">标题</param>
+            <param name="ex">异常信息</param>
+        </member>
+        <member name="M:DebugAssert.Log.WriteLog(System.String,System.String,System.String)">
+            <summary>
+                写日记文本，追加的模式
+            </summary>
+        </member>
+        <member name="M:DebugAssert.Log.WriteLogSendEMByte(System.String)">
+            <summary>
+                写报文记录
+            </summary>
+            <param name="message">报文记录</param>
+        </member>
+        <member name="M:DebugAssert.Log.ClearLog">
+            <summary>
+                清除日记文件，只保留最近30天的日记文本
+            </summary>
+        </member>
+        <member name="M:DebugAssert.Log.IniLog">
+            <summary>
+            初始化log配置文件
+            </summary>
+        </member>
+    </members>
+</doc>

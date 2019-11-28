@@ -1,0 +1,33 @@
+版本说明：
+
+20181102增加JSON下行帧CRC校验。
+20181025解决登录粘包问题
+20181226增加AES加解密
+20190108增加AES加解密另外的方法pyaes，但有不超过16字节的限值
+
+
+使用要求：
+1、安装pycharm。
+2、安装python2.7版。
+3、文件python解压到D盘根目录下。
+4、pycharm 中打开test1502json，修改409行，IP和端口为本机端口
+5、修改模版时请将EXCEL中的数据标识数据体修改为字符形式
+
+注意：pycharm中导入以下模块（不要用最新版本）：
+模块名称        版本
+PyYAML	        3.13
+Rx	        1.6.1
+configparser	3.5.0
+future	        0.16.0
+ironproject	0.1
+iso8601   	0.1.12
+jsons	        0.4.1
+ordereddict	1.1
+pip	        9.0.1
+pySerialMonitor	0.1
+pyserial	2.7
+pythonnet	2.3.0
+pywin32	        223
+pywin32-ctypes	0.1.2
+setuptools	28.8.0
+system	        0.1.14

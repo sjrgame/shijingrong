@@ -1,0 +1,4585 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EquipmentSet</name>
+    </assembly>
+    <members>
+        <member name="M:EquipmentSet.IEquipmentWC.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.ClosePort">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wAutoShutdown(EquipmentSet.FST_SND_LOOP)">
+            <summary>
+                自动短接,需要初始化IsVerify属性；
+            </summary>
+            <param name="fstSndLoop">主次回路</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wAutoShutdown(System.Int32,EquipmentSet.MeterStatus)">
+            <summary>
+                单个表位自动短接功能
+            </summary>
+            <param name="emno">表号，从0开始</param>
+            <param name="meterStatus">0:挂表；1:未挂表；2:次回路挂表；3:次回路未挂表</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wConnectCommSet">
+            联机误差板，包括每一个表位。
+            <summary>
+                联机误差板，包括每一个表位。
+            </summary>
+            <returns>"true"说明联机成功，否则失败</returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wLatentStart">
+            <summary>
+                潜动开始
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wReadLatentPulse(System.Int32)">
+            <summary>
+                读取潜动脉冲
+            </summary>
+            <param name="meterIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSend_Get_YaoCe(System.Byte)">
+            查询遥测
+            <summary>
+                查询遥测
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <returns>
+                B8 ad 11 11 da0-da7,bj CS
+                da0-da7为遥测状态值,bj为报警状态值；
+                a0-da7,bj展开为二进制代码D7-D0, D2位表示初状态,
+                D1位表示变位状态（0无变位，1有变位），D0位表示当前	状态（0表示闭合，1表示断开）；
+            </returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendBegin_End_YaoCe(System.Byte,System.Int32)">
+            开始\结束遥测
+            <summary>
+                开始\结束遥测
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <param name="status">status=10 开始遥测；status=12 结束遥测</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommarr_ReadERR(System.Byte)">
+            <summary>
+                返回误差句柄
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数+误差</returns>
+            <example>例："01,07,+0.0121",表位，第1表位，做出的第7次误差，误差为+0.0121</example>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommarr_ReadPulse(System.Byte)">
+            <summary>
+                读取脉冲，时段投切时候用到
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数</returns>
+            <example>例："01,07",表位，第1表位，做出的第7个脉冲</example>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommarr_ZZ(System.Byte)">
+            <summary>
+                获取走字时候每个表位走字脉冲和标准表脉冲
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+表计脉冲个数+标准表脉冲</returns>
+            7
+            <example>例："01,1000,12003904",表位，第1表位，表走脉冲数，标准表脉冲数</example>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommChkPBegin">
+            <summary>
+                开始校验,误差计算器开始工作。
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommChkPEnd">
+            <summary>
+                当前校验点结束，切换至HELLO状态。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommChkType(System.Int32)">
+            <summary>
+                设置校表模式
+            </summary>
+            <param name="value">
+                value=07,电能误差试验;
+                value=08,日计时误差试验;
+                value=09,需量周期误差试验;
+                value=10,电能走字试验;
+                value=11,电表潜动试验;
+                value=12,电表启动试验;
+                value=13,电表捕黑试验;
+                value=14,常数校核试验;
+                value=15,定数走字试验.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommEMC(System.Int32[],System.Int32)">
+            <summary>
+                发送被检表常数
+            </summary>
+            <param name="meterC">每一个表位的常数，可能会出现不同的常数，所以用数组。</param>
+            <param name="currfcoe">当前的分频系数,默认为1</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommFcoe(System.Double)">
+            <summary>
+                分频系数
+            </summary>
+            <param name="fcoe">分频系数，double</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommN(System.Byte)">
+            <summary>
+                校验圈数，不超过99
+            </summary>
+            <param name="chkR">不超过99</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommPulseType(System.Boolean)">
+            <summary>
+                校验脉冲方式
+            </summary>
+            <param name="direction">false反向  true正向</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendCommSTEMC(System.Int64)">
+            <summary>
+                发送标准表常数。
+            </summary>
+            <param name="stemc">标准表常数</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendControlWCColor(System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="color">  三色灯控制指令,0为开机默认全灭状态，1绿灯亮，2Color.Red ，3Color.Green</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendFeeCardSwitch(System.Byte,System.Byte)">
+            插卡切换命令
+            <summary>
+                插卡切换命令
+            </summary>
+            <param name="emno">表位号，从1开始</param>
+            <param name="cardchanel">0为空卡，1-6分别对应各种费控卡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendMKSignal(System.Byte,System.Int32)">
+            输出门控信号
+            <summary>
+                输出门控信号
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <param name="status">status=0 输出断开信号；status=1 输出闭合信号；</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendMPulsef(System.Byte,System.Int32,System.Int32,System.Int32)">
+            8路脉冲输出
+            <summary>
+                8路脉冲输出
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <param name="chanel">设置第几路脉冲，可设为第0-7，即第1路至第8路</param>
+            <param name="mcycle">设置脉冲周期，单位为mS,最小值为2。 0输出高电平,1输出低电平</param>
+            <param name="mcNums">设置脉冲个数，0无输出, 4294967295持续输出</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendOpenCloseIChanel(System.Byte,System.Byte)">
+            <summary>
+                电流通断命令,1为闭和，0为断；（磁保持继电器 ）
+            </summary>
+            <param name="emno">当前表位,从1开始</param>
+            <param name="openin">0为闭和,电流走表内 ; 1为断,电流走误差板</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendOpenCloseUChanel(System.Byte,System.Byte)">
+            <summary>
+                改造误差板，即97表位，在此次方案中，可能不需要使用该方法。
+                把跳闸检测误差板接入电流回路
+                电压通断命令,1为通，0为断
+            </summary>
+            <param name="emno">当前表位,从1开始</param>
+            <param name="openin">0 为不接入，1为接入 </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendOpenConnect(System.Byte)">
+            <summary>
+                连接误差板
+            </summary>
+            <param name="emno">表位，从1开始。</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendOpenPulseChanel(System.Byte,System.Byte)">
+            <summary>
+                自动脉冲切换
+            </summary>
+            <param name="emno">99H群发，否则发送单表位,从1开始</param>
+            <param name="chanel">P+:0,P-:2,Q+:3,Q-:1,CLK+:5,CLK-:4,高频:6</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendParas(System.Int32[],System.Double,System.Byte,System.Boolean,System.Byte,System.Int32)">
+            综合发送误差板参数
+            <summary>
+                综合发送误差板参数
+            </summary>
+            <param name="meterC">每一个表位的常数数组。</param>
+            <param name="fcoe">分频系数(1-10000000)</param>
+            <param name="chkR">校验圈数，不超过99</param>
+            <param name="direction">false反向  true正向</param>
+            <param name="chanel">P+:0,P-:2,Q+:3,Q-:1,CLK+:5,CLK-:4,高频:6</param>
+            <param name="chkType">
+                value=07,电能误差试验;
+                value=08,日计时误差试验;
+                value=09,需量周期误差试验;
+                value=10,电能走字试验;
+                value=11,电表潜动试验;
+                value=12,电表启动试验;
+                value=13,电表捕黑试验;
+                value=14,常数校核试验;
+                value=15,定数走字试验.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendReadErr(System.Byte,System.Byte)">
+            <summary>
+                读取误差值
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="pkind">
+                pkind =0,读取误差，表位+次数+误差；
+                pkind =1,读取日计时误差，表位+次数+误差；
+                pkind =2,读取需量周期误差，表位+次数+误差；
+                pkind =3,读取走字试验误差，表位+被检表脉冲数+标频脉冲数；
+                pkind =4,读取潜动试验误差，表位+脉冲个数；
+                pkind =5,读取启动误差，表位+脉冲个数；
+                pkind =8,读取脉宽测试试验误差，表位+次数+误差；
+                pkind =11,读取常数效核试验误差，表位+被检表常数+true/false；
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendReadGH(System.Byte)">
+            读取功耗测试数据
+            <summary>
+                读取功耗测试数据
+            </summary>
+            <param name="emno">表位号，从1开始</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendReAlarmCheck(System.Int32,EquipmentSet.IntelligenceType,EquipmentSet.WarningType)">
+            <summary>
+                获取报警状态（三相）
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="inttell">跳闸类型</param>
+            <param name="warning">报警方式</param>
+            <returns>true：表示跳闸或者表开路；false：表示正常状态</returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendReUCheck(System.Int32)">
+            获取跳闸状态,SJJ2010设备类型有效
+            <summary>
+                获取跳闸状态,SJJ2010设备类型有效
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <returns>true：表示跳闸或者表开路；false：表示正常状态</returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendReUCheck(System.Int32,EquipmentSet.IntelligenceType)">
+            <summary>
+                获取跳闸状态
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="inttell"></param>
+            <returns>true：表示跳闸或者表开路；false：表示正常状态</returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentWC.wSendUCheck(System.Int32,System.Int32)">
+            <summary>
+                电压检测切换指令 电压检测切换指令,0为开机默认闸门电压检测状态,1为表位电流开路电压检测状态， CheckU  = 0，默认为电压闸门检测状态
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="chku">
+                0为开机默认闸门电压检测状态,21为表位带电流检测，11为不带电流的检测. 1)0为开机默认闸门电压检测状态；
+                2)1为表位电流开路电压检测状态（1为A相，2为B相，3为C相，单相仅1有效）；3)s低位为0时为开机默认闸门电压检测状态（外跳检测），高位也为0；4)s高位为1时带延时的自动合闸，主要用于无电流的开路检测；
+                5)s高位为2时为无延时自动短路，主要用于有电流跳闸试验（0x21等）；6)配合查询指令0xa4 sa一起使用。
+            </param>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentWC.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentWC.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentWC.IsVerify">
+            当前表位选中的标志
+            <summary>
+                当前表位选中的标志,true:表示选中;false:表示未选表计,对应wAutoShutDown使用
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentWC.Meter485Status">
+            在总线式485进行通讯时候，记录当前表位打开关闭的状态（0-关，1-通）（只读）
+            <summary>
+                在总线式485进行通讯时候，记录当前表位打开关闭的状态（0-关，1-通）
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentWC.SetMeterNums">
+            表位数量
+            <summary>
+                表位数量
+            </summary>
+        </member>
+        <member name="E:EquipmentSet.IEquipmentWC.ShowMsgMdi">
+            <summary>
+                数据刷新到窗体界面
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.Phase">
+            <summary>
+                相别，"A"：A(B)相；"B"：B相；"C"：C(B)相。注意三相三线表不作B相试验
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.WorkPhaseU">
+            <summary>
+                工作相电压,7-ABC,A-1,B-2,C-4
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.WorkPhaseI">
+            <summary>
+                工作相电流,7-ABC,A-1,B-2,C-4
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.Direction">
+            <summary>
+                正反向
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.FST_SND_LOOP">
+            <summary>
+                主次回路
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.PowerFactor">
+            <summary>
+                功率因数
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.PtpNo">
+            <summary>
+                ptpno制式切换
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.OnInfoDelegate">
+            <summary>
+                定义委托
+            </summary>
+            <param name="sReceived">数据刷新内容</param>
+        </member>
+        <member name="T:EquipmentSet.ElecMotorPressureStatus">
+            压接电机后[状态]
+            <summary>
+            压接电机[状态]
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.未压无表待机">
+            <summary>
+            未压无表待机
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.未压已装表">
+            <summary>
+            未压已装表
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.未压表掉落">
+            <summary>
+            未压表掉落
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.未压表位不正">
+            <summary>
+            未压表位不正
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.未压电机故障">
+            <summary>
+            未压电机故障
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.已压耐压位置">
+            <summary>
+            已压接到耐压位置，可以	耐压测试	//山东济南自动压接台体有此功能
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.未压未知错误">
+            <summary>
+            未压未知错误
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.已压无表空压">
+            <summary>
+            已压无表空压
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.已压表位正常">
+            <summary>
+            已压表位正常
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.已压表端子卡死">
+            <summary>
+            已压表端子卡死
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.已压表松">
+            <summary>
+            已压表松
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.已压电机故障">
+            <summary>
+            已压电机故障
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressureStatus.已压未知错误">
+            <summary>
+            已压电机故障
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.RefreshMonitorDelegate">
+            <summary>
+                监视表刷新内容
+            </summary>
+            <param name="gMonitor">监视表类模块</param>
+        </member>
+        <member name="T:EquipmentSet.PulseType">
+            自动脉冲切换
+            <summary>
+                自动脉冲切换
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentSJJ">
+            <summary>
+                SD2000通讯协议类模块
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.IEquipmentSJJ">
+            <summary>
+                设备层通讯
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.ConnectSet">
+            联机,系统连接。
+            <summary>
+                联机,系统连接。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommChkEnd">
+            与主机脱机
+            <summary>
+                与主机脱机
+            </summary>
+            <returns>true:脱机成功;false:脱机失败</returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommfs(System.Int32)">
+            发送脉冲类型
+            <summary>
+                0脉冲类型  1时钟  0电能
+            </summary>
+            <param name="value">1时钟  0电能</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendStartCountStemN">
+            命令开始计标频
+            <summary>
+                命令开始计标频
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendEndCountStemN">
+            获取标准表标频信息
+            <summary>
+                获取标准表标频信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendWantN_C">
+            命令开始被检表走字脉冲数计数
+            <summary>
+                命令开始被检表走字脉冲数计数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommChkZBegin">
+            走字开始命令
+            <summary>
+                走字开始命令
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommOpen(System.Boolean)">
+            开环闭环命令
+            <summary>
+                开环闭环命令
+            </summary>
+            <param name="bOpen">BOpen=true,开环 else 闭环</param>
+            <returns> 返回bool类型 </returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommSpeedUI(System.Int32)">
+            信号升降速度设置
+            <summary>
+                信号升降速度设置
+            </summary>
+            <param name="seconds">信号调节步长(1-100)，单位：秒</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommF(System.Single)">
+            <summary>
+                频率，Hz
+            </summary>
+            <param name="fltF">频率，Hz</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommU(System.Single,EquipmentSet.WiringMode,EquipmentSet.WorkPhaseU,System.Boolean)">
+            <summary>
+                发送电压信息
+            </summary>
+            <param name="voltage">需要升起的幅度电压，100%，80%</param>
+            <param name="wiringMode">告知当前PTPNO</param>
+            <param name="workPhase">电压升起的工作相，1，2，4，7分别对应（ABC合），5对应3相3线合元</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommI(System.Single,EquipmentSet.WiringMode,EquipmentSet.WorkPhaseI,System.Boolean)">
+            <summary>
+                发送电压信息
+            </summary>
+            <param name="current">需要升起的幅度电流，100%，80%</param>
+            <param name="wiringMode">告知当前PTPNO</param>
+            <param name="workPhase">电压升起的工作相，1，2，4，7分别对应（ABC合），5对应3相3线合元</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommP(System.Single,EquipmentSet.WorkPhaseI)">
+            <summary>
+                发送相位信息
+            </summary>
+            <param name="fltP">相位值，单位°</param>
+            <param name="workPhase">相位工作相</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommUabc(System.Single,System.Single,System.Single)">
+            <summary>
+                分相发送A\B\C分相电压
+            </summary>
+            <param name="fltUa">UA,单位100%</param>
+            <param name="fltUb">UB,单位100%</param>
+            <param name="fltUc">UC,单位100%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommIabc(System.Single,System.Single,System.Single)">
+            <summary>
+                分相发送A\B\C分相电流
+            </summary>
+            <param name="fltIa">UA,单位100%</param>
+            <param name="fltIb">UB,单位100%</param>
+            <param name="fltIc">UC,单位100%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommPabc(System.Single,System.Single,System.Single)">
+            <summary>
+                分相发送相位角信息，单位°
+            </summary>
+            <param name="fltPa">phase A ，单位°</param>
+            <param name="fltPb">phase B ，单位°</param>
+            <param name="fltPc">phase C ，单位°</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommImin(System.Single,EquipmentSet.WorkPhaseI)">
+            <summary>
+                发送小电流，低于50ma需要此来发送
+            </summary>
+            <param name="fltI">电流值，100%</param>
+            <param name="workphase">电流升起工作相，同发送电流一致。</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommUIDownRapid">
+            <summary>
+                快速降台体电压电流
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommHarmonicSet(EquipmentSet.HarmonicKind)">
+            谐波类型设置
+            <summary>
+                谐波类型设置
+            </summary>
+            <param name="harmonic">谐波类型，参考HarmoincKind枚举</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommHarmonicContent(System.String[],System.String[])">
+            发送谐波含量，1-21次，最多可以叠加5种波形，幅值为0时，则为清除谐波含量
+            <summary>
+                发送谐波含量，1-21次，最多可以叠加5种波形，幅值为0时，则为清除谐波含量
+            </summary>
+            <param name="uContent">电压谐波含量，格式：XX,XX,XX；幅值,相位角度,系数</param>
+            <param name="content">电流谐波含量，格式：XX,XX,XX；幅值,相位角度,系数</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo,System.Boolean)">
+            装置校验设置信息(初始化
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommRangeNo(System.Single,System.Single,System.Boolean)">
+            发送设备电压电流量程信息
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="u">额定电压，0-380，单位V</param>
+            <param name="curri">实际需要升起的电流，0-100，单位A</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommU(System.Single,EquipmentSet.PtpNo,System.Boolean,System.Boolean)">
+            发送电压信息
+            <summary>
+                发送电压信息
+            </summary>
+            <param name="fltU">需要升起的幅度电压，100%，80%</param>
+            <param name="ptpNo">告知当前PTPNO</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommI(System.Single,EquipmentSet.PtpNo,EquipmentSet.WorkPhaseI,System.Boolean,System.Boolean)">
+            发送电流信息
+            <summary>
+                发送电流信息
+            </summary>
+            <param name="fltI">需要升起的幅度电流，100%，80%</param>
+            <param name="ptpNo">告知当前PTPNO</param>
+            <param name="workPhase">电压升起的工作相，1，2，4，7分别对应（ABC合），5对应3相3线合元</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.ClearWarning">
+            <summary>
+                清除报警信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommSpeedUI(System.Int32,System.Int32)">
+            <summary>
+                设置电压电流升起的速度，NZ2230表源一体用到，其他不用
+            </summary>
+            <param name="uspeed">UJ?	电压幅度输出速度	调整步长(%Ub)	0.002-1.0	0.1,单位：秒</param>
+            <param name="ispeed">IJ?	电压幅度输出速度	调整步长(%Ib)	0.002-1.0	0.1,单位：秒</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendWantStemC">
+            请求回发标准表常数
+            <summary>
+                请求回发标准表常数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommRangeNo(System.Single,System.Single)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.SendCommVoltageDropBreak(EquipmentSet.WorkPhaseU,EquipmentSet.PtpNo,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            电压跌落和终端
+            </summary>
+            <param name="workPhase">电压工作相别</param>
+            <param name="ptpno">制式</param>
+            <param name="breakTimes">中断/跌落次数</param>
+            <param name="voltagePercentage">中断/跌落电压, 额定电压的比例</param>
+            <param name="dropTimes">中断/跌落时间, 单位ms</param>
+            <param name="recoveryTimes">两次中间电压恢复时间, 单位ms</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.GetStemCTheory(System.Single,System.Single)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="u">电压档位V</param>
+            <param name="I">实际输出电流A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.GetRangeUbI(System.Single)">
+            获取电压量程
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="curru">当前升起的电压</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentSJJ.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentSJJ.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentSJJ.SetSinglePhase">
+            true：单相；false：三相设备
+            <summary>
+                true：单相；false：三相设备
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentSJJ.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentSJJ.Stemc">
+            标准表常数（只读）
+            <summary>
+                标准表常数
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.IEquipmentSJJ.HaveU">
+            当前设备是否有电压的标志
+            <summary>
+                当前设备是否有电压的标志   
+            </summary>
+        </member>
+        <member name="E:EquipmentSet.IEquipmentSJJ.ShowMsgMdi">
+            <summary>
+                数据刷新到窗体界面
+            </summary>
+        </member>
+        <member name="E:EquipmentSet.IEquipmentSJJ.SendCurrentLoad">
+            <summary>
+                定义一个消息接收事件
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentSJJ._ptpNo">
+            <summary>
+                当前制式
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentSJJ._rangeIb">
+            <summary>
+                电流量程
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentSJJ._rangeUb">
+            <summary>
+                电压量程
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.#ctor(System.String)">
+            构造函数
+            <summary>
+                构造函数
+            </summary>
+            <param name="systemPortname">系统通讯端口(默认为COM3)</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.#ctor(System.String,System.Nullable{EquipmentSet.StandardScale},System.String)">
+            <summary>
+                SD2000通讯类模块
+            </summary>
+            <param name="systemPortname">系统通讯端口</param>
+            <param name="standardScale">标准表类型</param>
+            <param name="stdPortName">标准表通讯端口</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.timer_Tick(System.Object,System.EventArgs)">
+            <summary>
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.comm_DataReceived">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.ConnectSet">
+            联机,系统连接。
+            <summary>
+                联机,系统连接。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommChkEnd">
+            与主机脱机
+            <summary>
+                与主机脱机
+            </summary>
+            <returns>true:脱机成功;false:脱机失败</returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommfs(System.Int32)">
+            发送脉冲类型
+            <summary>
+                0脉冲类型  1时钟  0电能
+            </summary>
+            <param name="value">1时钟  0电能</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendStartCountStemN">
+            命令开始计标频
+            <summary>
+                命令开始计标频
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendEndCountStemN">
+            获取标准表标频信息
+            <summary>
+                获取标准表标频信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendWantStemC">
+            请求回发标准表常数
+            <summary>
+                请求回发标准表常数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendWantN_C">
+            命令开始被检表走字脉冲数计数
+            <summary>
+                命令开始被检表走字脉冲数计数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommChkZBegin">
+            走字开始命令
+            <summary>
+                走字开始命令
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommOpen(System.Boolean)">
+            开环闭环命令
+            <summary>
+                开环闭环命令
+            </summary>
+            <param name="bOpen">BOpen=true,开环 else 闭环</param>
+            <returns> 返回bool类型 </returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommSpeedUI(System.Int32)">
+            信号升降速度设置
+            <summary>
+                信号升降速度设置
+            </summary>
+            <param name="seconds">信号调节步长(1-100)，单位：秒</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommRangeNo(System.Single,System.Single)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommF(System.Single)">
+            <summary>
+                频率，Hz
+            </summary>
+            <param name="fltF">频率，Hz</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommU(System.Single,EquipmentSet.WiringMode,EquipmentSet.WorkPhaseU,System.Boolean)">
+            <summary>
+                发送电压信息
+            </summary>
+            <param name="voltage">需要升起的幅度电压，100%，80%</param>
+            <param name="wiringMode">告知当前PTPNO</param>
+            <param name="workPhase">电压升起的工作相，1，2，4，7分别对应（ABC合），5对应3相3线合元</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommI(System.Single,EquipmentSet.WiringMode,EquipmentSet.WorkPhaseI,System.Boolean)">
+            <summary>
+                发送电压信息
+            </summary>
+            <param name="current">需要升起的幅度电流，100%，80%</param>
+            <param name="wiringMode">告知当前PTPNO</param>
+            <param name="workPhase">电压升起的工作相，1，2，4，7分别对应（ABC合），5对应3相3线合元</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommP(System.Single,EquipmentSet.WorkPhaseI)">
+            <summary>
+                发送相位信息
+            </summary>
+            <param name="fltP">相位值，单位°</param>
+            <param name="workPhase">相位工作相</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommUabc(System.Single,System.Single,System.Single)">
+            <summary>
+                分相发送A\B\C分相电压
+            </summary>
+            <param name="fltUa">UA,单位100%</param>
+            <param name="fltUb">UB,单位100%</param>
+            <param name="fltUc">UC,单位100%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommIabc(System.Single,System.Single,System.Single)">
+            <summary>
+                分相发送A\B\C分相电流
+            </summary>
+            <param name="fltIa">UA,单位100%</param>
+            <param name="fltIb">UB,单位100%</param>
+            <param name="fltIc">UC,单位100%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommPabc(System.Single,System.Single,System.Single)">
+            <summary>
+                分相发送相位角信息，单位°
+            </summary>
+            <param name="fltPa">phase A ，单位°</param>
+            <param name="fltPb">phase B ，单位°</param>
+            <param name="fltPc">phase C ，单位°</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommImin(System.Single,EquipmentSet.WorkPhaseI)">
+            <summary>
+                发送小电流，低于50ma需要此来发送
+            </summary>
+            <param name="fltI">电流值，100%</param>
+            <param name="workphase">电流升起工作相，同发送电流一致。</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommUIDownRapid">
+            <summary>
+                快速降台体电压电流
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommArr(System.Byte[],System.Int32)">
+            发送函数(系统口)
+            <summary>
+                发送函数
+            </summary>
+            <param name="arr">用来直接发送到串口的数据，byte类型</param>
+            <param name="sendTimes">发送次数，用来重新发送</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.DataReceived(System.Byte[])">
+            将接受的数据进行解析处理(系统通讯端口)
+            <summary>
+                将接受的数据进行解析处理
+            </summary>
+            <param name="commData">byte[],串口接受的数据进行解析</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommHarmonicSet(EquipmentSet.HarmonicKind)">
+            谐波类型设置
+            <summary>
+                谐波类型设置
+            </summary>
+            <param name="harmonic">谐波类型，参考HarmoincKind枚举</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommHarmonicContent(System.String[],System.String[])">
+            发送谐波含量，1-21次，最多可以叠加5种波形，幅值为0时，则为清除谐波含量
+            <summary>
+                发送谐波含量，1-21次，最多可以叠加5种波形，幅值为0时，则为清除谐波含量
+            </summary>
+            <param name="uContent">电压谐波含量，格式：XX,XX,XX；幅值,相位角度,系数</param>
+            <param name="content">电流谐波含量，格式：XX,XX,XX；幅值,相位角度,系数</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommVoltageDropBreak(EquipmentSet.WorkPhaseU,EquipmentSet.PtpNo,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                电压跌落和终端
+            </summary>
+            <param name="workPhase">电压工作相别</param>
+            <param name="ptpno">制式</param>
+            <param name="breakTimes">中断/跌落次数</param>
+            <param name="voltagePercentage">中断/跌落电压, 额定电压的比例</param>
+            <param name="dropTimes">中断/跌落时间, 单位ms</param>
+            <param name="recoveryTimes">两次中间电压恢复时间, 单位ms</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo,System.Boolean)">
+            装置校验设置信息(初始化
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommRangeNo(System.Single,System.Single,System.Boolean)">
+            发送设备电压电流量程信息
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="u">额定电压，0-380，单位V</param>
+            <param name="curri">实际需要升起的电流，0-100，单位A</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommU(System.Single,EquipmentSet.PtpNo,System.Boolean,System.Boolean)">
+            发送电压信息
+            <summary>
+                发送电压信息
+            </summary>
+            <param name="fltU">需要升起的幅度电压，100%，80%</param>
+            <param name="ptpNo">告知当前PTPNO</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommI(System.Single,EquipmentSet.PtpNo,EquipmentSet.WorkPhaseI,System.Boolean,System.Boolean)">
+            发送电流信息
+            <summary>
+                发送电流信息
+            </summary>
+            <param name="fltI">需要升起的幅度电流，100%，80%</param>
+            <param name="ptpNo">告知当前PTPNO</param>
+            <param name="workPhase">电压升起的工作相，1，2，4，7分别对应（ABC合），5对应3相3线合元</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <param name="bolNZ2230">NZ2230协议？</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.ClearWarning">
+            <summary>
+                清除报警信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommArr(System.String,System.Int32)">
+            通用发送函数
+            <summary>
+                通用发送函数
+            </summary>
+            <param name="sendStr">发送的报文内容</param>
+            <param name="sendTimes">发送次数</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.DataReceived(System.String,System.String)">
+            数据报文解析
+            <summary>
+                数据报文解析
+            </summary>
+            <param name="rtnMsg">回传的报文</param>
+            <param name="anser">发送的报文，当回传==发送，说明发送成功</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.GetStemCTheory(System.Single,System.Single)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="u">电压档位V</param>
+            <param name="I">实际输出电流A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.GetRangeUb(System.Single)">
+            获取电压量程
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="curru">当前升起的电压</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.GetRangeUbI(System.Single)">
+            获取电压量程
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="curru">当前升起的电压</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentSJJ.SendCommSpeedUI(System.Int32,System.Int32)">
+            <summary>
+                设置电压电流升起的速度，NZ2230表源一体用到，其他不用
+            </summary>
+            <param name="uspeed">UJ?	电压幅度输出速度	调整步长(%Ub)	0.002-1.0	0.1</param>
+            <param name="ispeed">IJ?	电压幅度输出速度	调整步长(%Ib)	0.002-1.0	0.1</param>
+            <returns></returns>
+        </member>
+        <member name="E:EquipmentSet.EquipmentSJJ.ShowMsgMdi">
+            <summary>
+                数据刷新到窗体界面
+            </summary>
+        </member>
+        <member name="E:EquipmentSet.EquipmentSJJ.SendCurrentLoad">
+            <summary>
+                定义一个消息接收事件
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentSJJ.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentSJJ.SetSinglePhase">
+            true：单相；false：三相设备
+            <summary>
+                true：单相；false：三相设备
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentSJJ.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentSJJ.Stemc">
+            标准表常数（只读）
+            <summary>
+                标准表常数
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentSJJ.HaveU">
+            当前设备是否有电压的标志
+            <summary>
+                当前设备是否有电压的标志
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentSJJ.CurrentVoltageDropBreakOK">
+            <summary>
+                电压跌落试验是否成功标志
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.IEquipmentNYWC">
+            <summary>
+                耐压误差板系统
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentNYWC.wSendPressurePoints(System.String)">
+            耐压试验点设置
+            <summary>
+                耐压试验点设置
+            </summary>
+            <param name="nypoints">耐压试验点，目前只有UI和UIG两种</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentNYWC.wSendReadNYResult(System.Byte)">
+            读取耐压测试结果数据
+            <summary>
+                读取耐压测试结果数据
+            </summary>
+            <param name="emno">表位号，从1开始</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentNYWC.wSendLeakageCurrent(System.Byte,System.Byte)">
+            漏电流命令
+            <summary>
+                漏电流命令
+            </summary>
+            <param name="intiger">两位整数</param>
+            <param name="digi">两位小数</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentNYWC.wSendNYChkpBegin">
+            发送开始检定命令
+            <summary>
+                发送开始检定命令
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentNYWC.wSendNYChkpEnd">
+            耐压试验结束
+            <summary>
+                耐压试验结束
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentNYWC.wSendNYReset">
+            耐压试验停止，误差板待机
+            <summary>
+                耐压试验停止，误差板待机
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentNYWC.wGetSaftDoorStatus">
+            安全门（限位开关）状态
+            <summary>
+                安全门（限位开关）状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.#ctor(System.String)">
+            初始化误差板
+            <summary>
+                初始化误差板
+            </summary>
+            <param name="wcPortname">通讯端口号，默认为COM4</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.wSendLeakageCurrent(System.Byte,System.Byte)">
+            漏电流命令
+            <summary>
+                漏电流命令
+            </summary>
+            <param name="intiger">两位整数</param>
+            <param name="digi">两位小数</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.wSendPressurePoints(System.String)">
+            耐压试验点设置
+            <summary>
+                耐压试验点设置
+            </summary>
+            <param name="nypoints">耐压试验点，目前只有UI和UIG两种</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.wSendNYChkpEnd">
+            耐压试验结束
+            <summary>
+                耐压试验结束
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.wSendNYReset">
+            耐压试验停止，误差板待机
+            <summary>
+                耐压试验停止，误差板待机
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.wSendNYChkpBegin">
+            发送开始检定命令
+            <summary>
+                发送开始检定命令
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.wSendReadNYResult(System.Byte)">
+            读取耐压测试结果数据
+            <summary>
+                读取耐压测试结果数据
+            </summary>
+            <param name="emno">表位号，从1开始</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.wGetSaftDoorStatus">
+            安全门（限位开关）状态
+            <summary>
+                安全门（限位开关）状态
+            </summary>
+            <returns>true：正常，允许耐压试验；false：异常，不能试验</returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNYWC.NySendCommArr(System.Byte[])">
+            串口发送
+            <summary>
+                串口发送
+            </summary>
+            <param name="arr">发送的报文</param>
+        </member>
+        <member name="T:EquipmentSet.IntelligenceType">
+            <summary>
+                智能费控类型
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.IEquipmentMeterSerialComm">
+            <summary>
+                485通讯模块接口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendOpen485Chanels(EquipmentSet.SetConnector)">
+            切换到485通讯模式
+            <summary>
+                切换到485通讯模式
+            </summary>
+            <param name="setConnector">总线式，分布式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendOpen485Chanels(System.Boolean)">
+            打开第一路or第二路485通道
+            <summary>
+                打开第一路or第二路485通道
+            </summary>
+            <param name="firstChanel">true：第一路；false：第二路</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendOpen485Chanels(System.Byte,System.Boolean)">
+            打开、关闭485通道
+            <summary>
+                打开、关闭485通道
+            </summary>
+            <param name="curremno">表位，从1开始。若为0x99，则为广播，对所有表位有效</param>
+            <param name="open485">true:打开，false:关闭</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wGet_Send_Base_Info(EquipmentSet.set485Chanels,System.Int32,System.Int32,System.Int32,System.String,System.Int32,System.Int32)">
+            分布式读取表地址，或者用来给误差板下发当前表位的【表地址】
+            <summary>
+                分布式读取表地址，或者用来给误差板下发当前表位的【表地址】
+            </summary>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <param name="emno">表位，从1开始</param>
+            <param name="dlt">0：自动获取，1：97协议，2：07协议</param>
+            <param name="baudrate">1.300，2.600，3.1200，4.2400，5.4800，6.9600，7.19200</param>
+            <param name="gaddress"> 表地址，当地址均为 0 时，系统自动读取地址；地址不为0时候，默认为PC下发表地址给误差板</param>
+            <param name="delaytimes">表示等待延时的时间，例：发送50，实际为50*10</param>
+            <param name="delaytimes2">示每次回传的字节之间的间隔，例：发送5，实际为5*10</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendReadBaseInfoData(System.Int32,EquipmentSet.set485Chanels)">
+            分布式获取表地址
+            <summary>
+                分布式获取表地址
+                同Get_Send_Base_Info方法一起使用。
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendReadTransData(System.Int32,EquipmentSet.set485Chanels)">
+            读取透明转发的数据
+            <summary>
+                读取透明转发的数据
+            </summary>
+            <param name="emno">读取透明转发的数据</param>
+            <param name="set485Chanels">first485==1，采用第一轮485进行通讯</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendTransData(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            透明转发
+            <summary>
+                透明转发
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="arr">是需要发送到表计的一个完整命令\r</param>
+            <example>例：如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16</example>
+            <param name="set485Chanels">1：第一路485；2：第二路485；3：两路同时发送（虚拟双ARM通讯）</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendTransDataSimple(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            简单协议解析
+            <summary>
+                简单协议解析
+                在使用该方法时候，需要先调用Get_Send_Base_Info的方法，否则不可使用。
+            </summary>
+            <param name="emno">表位信息，从1开始</param>
+            <param name="arr">
+                标准645协议中，从第二个68开始，到cs结束（不包括cs）
+                Arr()，是需要发送到表计的一个完整命令，如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16
+                在该命令中，只要发送14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33一段即可，但是前提是需要把表地址先发送给误差板
+            </param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommChkPEnd">
+            <summary>
+                当前校验点结束，切换至HELLO状态。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommChkType(System.Int32)">
+            <summary>
+                设置校表模式
+            </summary>
+            <param name="value">
+                value=07,电能误差试验;
+                value=08,日计时误差试验;
+                value=09,需量周期误差试验;
+                value=10,电能走字试验;
+                value=11,电表潜动试验;
+                value=12,电表启动试验;
+                value=13,电表捕黑试验;
+                value=14,常数校核试验;
+                value=15,定数走字试验.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommN(System.Byte)">
+            <summary>
+                校验圈数，不超过99
+            </summary>
+            <param name="chkR">不超过99</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommPulseType(System.Boolean)">
+            <summary>
+                校验脉冲方式
+            </summary>
+            <param name="direction">false反向  true正向</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendOpenPulseChanel(System.Byte,System.Byte)">
+            <summary>
+                自动脉冲切换
+            </summary>
+            <param name="emno">99H群发，否则发送单表位,从1开始</param>
+            <param name="chanel">P+:0,P-:2,Q+:3,Q-:1,CLK+:5,CLK-:4,高频:6</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommEMC(System.Int32[],System.Int32)">
+            <summary>
+                发送被检表常数
+            </summary>
+            <param name="meterC">每一个表位的常数，可能会出现不同的常数，所以用数组。</param>
+            <param name="currfcoe">当前的分频系数,默认为1</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommarr_ReadERR(System.Byte)">
+            <summary>
+                返回误差句柄
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数+误差</returns>
+            <example>例："01,07,+0.0121",表位，第1表位，做出的第7次误差，误差为+0.0121</example>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommChkPBegin">
+            <summary>
+                开始校验,误差计算器开始工作。
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentMeterSerialComm.wSendCommarr_ReadPulse(System.Byte)">
+            <summary>
+                读取脉冲，时段投切时候用到
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数</returns>
+            <example>例："01,07",表位，第1表位，做出的第7个脉冲</example>
+        </member>
+        <member name="T:EquipmentSet.ChkType">
+            误差板计量变量[电能误差试验 = 07][电能走字试验 = 10]
+            <summary>
+                误差板计量变量[电能误差试验 = 07][电能走字试验 = 10]
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.ElecMotorOverTurnStatus">
+            电机翻转动作[状态]
+            <summary>
+            电机翻转动作后状态
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.倾斜停机">
+            <summary>
+            倾斜停机
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.倾斜就绪">
+            <summary>
+            倾斜就绪
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.倾斜不能到位">
+            <summary>
+            倾斜不能到位
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.倾斜位置偏高">
+            <summary>
+            倾斜位置偏高
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.倾斜电机故障">
+            <summary>
+            倾斜电机故障
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.倾斜未知错误">
+            <summary>
+            倾斜未知错误
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.直立停机">
+            <summary>
+            直立停机
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.直立就绪">
+            <summary>
+            直立就绪
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.直立不能到位">
+            <summary>
+            直立不能到位
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.直立位置偏高">
+            <summary>
+            直立位置偏高
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.直立电机故障">
+            <summary>
+            直立电机故障
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurnStatus.直立未知错误">
+            <summary>
+            直立未知错误
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.SetConnector">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SetConnector.总线式">
+            <summary>
+            总线式485通讯
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SetConnector.分布式">
+            <summary>
+            分布式透明转发
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SetConnector.反极性">
+            <summary>
+            反极性透明转发
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SetConnector.网络Socket服务器客户端">
+            <summary>
+            网络串口服务器,主站模式，客户端链接
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SetConnector.COM串口服务器">
+            <summary>
+            COM串口服务器
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SetConnector.网络串口客户端">
+            <summary>
+            连接服务器端，作为Client处理。
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.WiringMode">
+            <summary>
+                接线方式
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentMeterSerialComm">
+            <summary>
+            独立分布式arm485通讯端口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.#ctor(System.String)">
+            初始化误差板
+            <summary>
+                初始化误差板
+            </summary>
+            <param name="wcPortname">通讯端口号，默认为COM4</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.ClosePort">
+            <summary>
+                关闭端口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.Finalize">
+            <summary>
+                析构函数
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.SendCommarr05(System.Byte[],System.Int32,System.Boolean)">
+            <summary>
+                串口发送
+            </summary>
+            <param name="arr">发送的报文</param>
+            <param name="sendTimes">发送次数</param>
+            <param name="withoutReceived">true表示无返回数据，false表示有返回数据</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.DataReceived05(System.Byte[])">
+            数据解码
+            <summary>
+                数据解码(误差口)
+            </summary>
+            <param name="commData">byte，串口字节数据</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendOpen485Chanels(System.Boolean)">
+            打开第一路or第二路485通道
+            <summary>
+                打开第一路or第二路485通道
+            </summary>
+            <param name="firstChanel">true：第一路；false：第二路</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendOpen485Chanels(System.Byte,System.Boolean)">
+            <summary>
+                打开、关闭485通道
+            </summary>
+            <param name="curremno">表位，从1开始。若为0x99，则为广播，对所有表位有效</param>
+            <param name="open485">true:打开，false:关闭</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendOpen485Chanels(EquipmentSet.SetConnector)">
+            <summary>
+                切换到485通讯模式
+            </summary>
+            <param name="setConnector">总线式，分布式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendTransData(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            <summary>
+                透明转发
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="arr">是需要发送到表计的一个完整命令\r</param>
+            <example>例：如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16</example>
+            <param name="set485Chanels">1：第一路485；2：第二路485；3：两路同时发送（虚拟双ARM通讯）</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendReadTransData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                读取透明转发的数据
+            </summary>
+            <param name="emno">读取透明转发的数据</param>
+            <param name="set485Chanels">first485==1，采用第一轮485进行通讯</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wGet_Send_Base_Info(EquipmentSet.set485Chanels,System.Int32,System.Int32,System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>
+                分布式读取表地址，或者用来给误差板下发当前表位的【表地址】
+            </summary>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <param name="emno">表位，从1开始</param>
+            <param name="dlt">0：自动获取，1：97协议，2：07协议</param>
+            <param name="baudrate">1.300，2.600，3.1200，4.2400，5.4800，6.9600，7.19200</param>
+            <param name="gaddress"> 表地址，当地址均为 0 时，系统自动读取地址；地址不为0时候，默认为PC下发表地址给误差板</param>
+            <param name="delaytimes">表示等待延时的时间，例：发送50，实际为50*10</param>
+            <param name="delaytimes2">示每次回传的字节之间的间隔，例：发送5，实际为5*10</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendReadBaseInfoData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                分布式获取表地址
+                同Get_Send_Base_Info方法一起使用。
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendTransDataSimple(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            <summary>
+                简单协议解析
+                在使用该方法时候，需要先调用Get_Send_Base_Info的方法，否则不可使用。
+            </summary>
+            <param name="emno">表位信息，从1开始</param>
+            <param name="arr">
+                标准645协议中，从第二个68开始，到cs结束（不包括cs）
+                Arr()，是需要发送到表计的一个完整命令，如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16
+                在该命令中，只要发送14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33一段即可，但是前提是需要把表地址先发送给误差板
+            </param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommChkPEnd">
+            <summary>
+                当前校验点结束，切换至HELLO状态。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommChkType(System.Int32)">
+            <summary>
+                设置校表模式
+            </summary>
+            <param name="value">
+                value=07,电能误差试验;
+                value=08,日计时误差试验;
+                value=09,需量周期误差试验;
+                value=10,电能走字试验;
+                value=11,电表潜动试验;
+                value=12,电表启动试验;
+                value=13,电表捕黑试验;
+                value=14,常数校核试验;
+                value=15,定数走字试验.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommN(System.Byte)">
+            <summary>
+                校验圈数，不超过99
+            </summary>
+            <param name="chkR">不超过99</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommPulseType(System.Boolean)">
+            <summary>
+                校验脉冲方式
+            </summary>
+            <param name="direction">false反向  true正向</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendOpenPulseChanel(System.Byte,System.Byte)">
+            <summary>
+                自动脉冲切换
+            </summary>
+            <param name="emno">99H群发，否则发送单表位,从1开始</param>
+            <param name="chanel">P+:0,P-:2,Q+:3,Q-:1,CLK+:5,CLK-:4,高频:6</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommEMC(System.Int32[],System.Int32)">
+            <summary>
+                发送被检表常数
+            </summary>
+            <param name="meterC">每一个表位的常数，可能会出现不同的常数，所以用数组。</param>
+            <param name="currfcoe">当前的分频系数,默认为1</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommarr_ReadERR(System.Byte)">
+            <summary>
+                返回误差句柄
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数+误差</returns>
+            <example>例："01,07,+0.0121",表位，第1表位，做出的第7次误差，误差为+0.0121</example>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommChkPBegin">
+            <summary>
+                开始校验,误差计算器开始工作。
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterSerialComm.wSendCommarr_ReadPulse(System.Byte)">
+            <summary>
+                读取脉冲，时段投切时候用到
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数</returns>
+            <example>例："01,07",表位，第1表位，做出的第7个脉冲</example>
+        </member>
+        <member name="P:EquipmentSet.EquipmentMeterSerialComm.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentMeterSerialComm.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.SET_TYPE">
+            <summary>
+                设备类型
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.单相">
+            <summary>
+            普通单相设备，包括1-96表位
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.三相">
+            <summary>
+            普通三相设备，包括1-48表位
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.NZ2230">
+            <summary>
+            nz2230协议，非常规设备
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.单相终端">
+            <summary>
+            单相采集器
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.三相终端">
+            <summary>
+            通用终端设备，支持48个串口模拟表
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.三相终端2013版">
+            <summary>
+            2013新国网终端设备，误差板作为模拟表通讯
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.单相2230">
+            <summary>
+            单相版本2230
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.SET_TYPE.单相终端2230">
+            <summary>
+            国网二型采集器设备
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.IEquipmentStd">
+            <summary>
+                标准表接口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentStd.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentStd.SendCommRangeNo(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <param name="rangeUb">输出电压实际量程</param>
+            <param name="rangeIb">输出电流实际量程</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentStd.GetStemCTheory(System.Single,System.Single,EquipmentSet.PtpNo)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="voltage">电压档位V</param>
+            <param name="current">实际输出电流A</param>
+            <param name="ptpNo">制式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentStd.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentStd.GetRangeUb(System.Single)">
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="voltage">实际输出电压值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentStd.SendCommfs(System.Int32)">
+            <summary>
+            标频时钟切换
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IEquipmentStd.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.#ctor(System.String)">
+            郑州三晖电气MDP2002A三相标准表
+            <summary>
+                郑州三晖电气MDP2002A标准表
+            </summary>
+            <param name="portName"></param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.SendCommRangeNo(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <param name="rangeUb">输出电压实际量程</param>
+            <param name="rangeIb">输出电流实际量程</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.GetStemCTheory(System.Single,System.Single,EquipmentSet.PtpNo)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="voltage">电压档位V</param>
+            <param name="current">实际输出电流A</param>
+            <param name="ptpNo">制式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.GetRangeUb(System.Single)">
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="voltage">实际输出电压值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.SendCommfs(System.Int32)">
+            <summary>
+            标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdMDP2002A.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdMDP2002A.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentInfrared">
+            <summary>
+            红外测试接口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentInfrared.#ctor(System.String)">
+            <summary>
+            红外测试接口
+            </summary>
+            <param name="commport">端口号</param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:EquipmentSet.EquipmentInfrared.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentInfrared.SendOpenMeterChanel(System.Int32)">
+            <summary>
+                打开某一表位通道
+            </summary>
+            <param name="meterIndex">表地址，从0开始</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentInfrared.GetDatasFromMeterByFrared(System.Int32,System.Byte[],System.Byte[]@)">
+            <summary>
+                读取红外645数据内容
+            </summary>
+            <param name="meterIndex">表位号，从0开始</param>
+            <param name="sendarr">需要发送的报文</param>
+            <param name="datas">应答的报文内容</param>
+            <returns></returns>
+        </member>
+        <member name="T:EquipmentSet.IIndustrialControlPower">
+            <summary>
+                电源控制箱
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.ILightenColor.Lighten(System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="color">  三色灯控制指令,0为开机默认绿灯亮，1：黄色，2：红色 ，3：蓝色</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.ILightenColor.Lighten(System.Int32,System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="meterIndex">表位索引，从0开始</param>
+            <param name="color">  三色灯控制指令,0为开机默认绿灯亮，1：黄色，2：红色 ，3：蓝色</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.ConnectControlPower">
+            系统联机
+            <summary>
+                系统联机
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.ControlPower(System.Boolean)">
+            受控电源状态控制
+            <summary>
+                受控电源状态控制，true：接通上电；false：断开电源
+            </summary>
+            <param name="open"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.ControlPower_GL(System.Byte)">
+            隔离电源状态控制，仅仅在耐压台和插卡装置上使用该命令
+            <summary>
+                隔离电源状态控制
+            </summary>
+            <param name="percent">0-0%，1-70%，2-100%，3-120%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.IniControlPower">
+            系统初始化，切断所有电源，报警灯长绿
+            <summary>
+                系统初始化，切断所有电源，报警灯长绿
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.Lighten(System.Drawing.Color)">
+            点亮检验台的运行状态灯
+            <summary>
+                点亮检验台的运行状态灯
+                由供应商根据硬件实现方式保存灯的状态；在收到下一个状态变更命令前，要维持原有状态
+            </summary>
+            <param name="color">状态灯颜色，目前支持，Color.Red:红，Color.Green:绿，Color.Yellow:黄</param>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.ReadAlarmInfo">
+            <summary>
+                读取报警信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.RemoveAlarm">
+            解除限位报警
+            <summary>
+                限位开关控制复位脉冲（100ms），解除限位报警
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IIndustrialControlPower.ResetPower">
+            电源复位
+            <summary>
+                电源复位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:EquipmentSet.EquipmentStdZeraRMM3000">
+            <summary>
+                ZeraRMM3000型0.02级标准表通讯协议
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.#ctor(System.String)">
+            <summary>
+            ZeraRMM3000型0.02级标准表通讯协议
+            </summary>
+            <param name="portName">通讯端口</param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.ConnectSet">
+            联机,系统连接。
+            <summary>
+                联机,系统连接。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.SendCommArr(System.Byte[],System.Int32)">
+            <summary>
+            通用发送命令
+            </summary>
+            <param name="arr">发送的报文</param>
+            <param name="sendTimes">次数</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.DataReceived(System.Byte[])">
+            将接受的数据进行解析处理(系统通讯端口)
+            <summary>
+                将接受的数据进行解析处理
+            </summary>
+            <param name="commData">byte[],串口接受的数据进行解析</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.SendCommRangeNo(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <param name="rangeUb">输出电压实际量程</param>
+            <param name="rangeIb">输出电流实际量程</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.GetStemCTheory(System.Single,System.Single,EquipmentSet.PtpNo)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="voltage">电压档位V</param>
+            <param name="current">实际输出电流A</param>
+            <param name="ptpNo">制式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.GetRangeUb(System.Single)">
+            <summary>
+            获取电压量程
+            </summary>
+            <param name="voltage">实际输出电压值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.SendCommfs(System.Int32)">
+            <summary>
+            标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdZeraRMM3000.Close">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdZeraRMM3000.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentNZ2230">
+            <summary>
+                NZ2230通讯接口实现类
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentNZ2230.ErrValues">
+            <summary>
+                误差值
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentNZ2230.GSetMonitor">
+            <summary>
+                监视表
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentNZ2230._ptpNo">
+            <summary>
+                当前制式
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentNZ2230._rangeIb">
+            <summary>
+                电流量程
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.EquipmentNZ2230._rangeUb">
+            <summary>
+                电压量程
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.#ctor(System.String)">
+            初始化通讯串口
+            <summary>
+                初始化通讯串口
+            </summary>
+            <param name="portName">初始化通讯串口名:COM1,COM2等</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.#ctor(System.String,System.Nullable{EquipmentSet.StandardScale},System.String)">
+            <summary>
+                初始化通讯串口
+            </summary>
+            <param name="portName">初始化通讯串口</param>
+            <param name="standardScale">标准表类型</param>
+            <param name="stdPortName">标准表通讯端口</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.Close">
+            <summary>
+                关闭
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.ConnectSet">
+            联机命令
+            <summary>
+                联机命令
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommArr(System.String,System.Int32)">
+            通用发送函数
+            <summary>
+                通用发送函数
+            </summary>
+            <param name="sendStr">发送的报文内容</param>
+            <param name="sendTimes">发送次数</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommArr(System.Byte[],System.Int32)">
+            发送函数(系统口)
+            <summary>
+                发送函数
+            </summary>
+            <param name="arr">用来直接发送到串口的数据，byte类型</param>
+            <param name="sendTimes">发送次数，用来重新发送</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.DataReceived(System.String,System.String)">
+            数据报文解析
+            <summary>
+                数据报文解析
+            </summary>
+            <param name="rtnMsg">回传的报文</param>
+            <param name="anser">发送的报文，当回传==发送，说明发送成功</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.timer_Tick(System.Object,System.EventArgs)">
+            <summary>
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommSpeedUI(System.Int32)">
+            <summary>
+            </summary>
+            <param name="seconds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommSpeedUI(System.Int32,System.Int32)">
+            调整电压电流输出数度
+            <summary>
+                调整电压电流输出数度
+            </summary>
+            <param name="uspeed">UJ?	电压幅度输出速度	调整步长(%Ub)	0.002-1.0	0.1</param>
+            <param name="ispeed">IJ?	电压幅度输出速度	调整步长(%Ib)	0.002-1.0	0.1</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommChkEnd">
+            检定结束命令
+            <summary>
+                检定结束命令
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo,System.Boolean)">
+            <summary>
+            </summary>
+            <param name="setPhaseOrder"></param>
+            <param name="ptpNO"></param>
+            <param name="bolNZ2230"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommRangeNo(System.Single,System.Single)">
+            发送设备电压电流量程信息
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">实际需要升起的电流，0-100，单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommRangeNo(System.Single,System.Single,System.Boolean)">
+            <summary>
+            </summary>
+            <param name="u"></param>
+            <param name="curri"></param>
+            <param name="bolNZ2230"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommF(System.Single)">
+            频率，Hz
+            <summary>
+                频率，Hz
+            </summary>
+            <param name="fltF">频率，Hz</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommU(System.Single,EquipmentSet.WiringMode,EquipmentSet.WorkPhaseU,System.Boolean)">
+            升电压
+            <summary>
+                升电压
+            </summary>
+            <param name="voltage">额定量程的百分比，例：100</param>
+            <param name="wiringMode">接线方式</param>
+            <param name="workPhase">工作相</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommU(System.Single,EquipmentSet.PtpNo,System.Boolean,System.Boolean)">
+            <summary>
+            </summary>
+            <param name="voltage"></param>
+            <param name="ptpNo"></param>
+            <param name="bolNotAuto"></param>
+            <param name="bolNZ2230"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommUabc(System.Single,System.Single,System.Single)">
+            <summary>
+                分相发送A\B\C分相电压
+            </summary>
+            <param name="fltUa">UA,单位100%</param>
+            <param name="fltUb">UB,单位100%</param>
+            <param name="fltUc">UC,单位100%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommI(System.Single,EquipmentSet.WiringMode,EquipmentSet.WorkPhaseI,System.Boolean)">
+            发送电流信息
+            <summary>
+                发送电流信息
+            </summary>
+            <param name="current">需要升起的幅度电流，100%，80%</param>
+            <param name="wiringMode">接线方式</param>
+            <param name="workPhase">电压升起的工作相，1，2，4，7分别对应（ABC合），5对应3相3线合元</param>
+            <param name="bolNotAuto">bolNotAuto =true ,表示不换挡，=false 系统自动换挡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommI(System.Single,EquipmentSet.PtpNo,EquipmentSet.WorkPhaseI,System.Boolean,System.Boolean)">
+            <summary>
+            </summary>
+            <param name="current"></param>
+            <param name="ptpNo"></param>
+            <param name="workPhase"></param>
+            <param name="bolNotAuto"></param>
+            <param name="bolNZ2230"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommIabc(System.Single,System.Single,System.Single)">
+            分相发送A\B\C分相电流
+            <summary>
+                分相发送A\B\C分相电流
+            </summary>
+            <param name="fltIa">UA,单位100%</param>
+            <param name="fltIb">UB,单位100%</param>
+            <param name="fltIc">UC,单位100%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommP(System.Single,EquipmentSet.WorkPhaseI)">
+            <summary>
+            </summary>
+            <param name="fltP"></param>
+            <param name="workPhase"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommPabc(System.Single,System.Single,System.Single)">
+            分相发送相位角信息，单位°
+            <summary>
+                分相发送相位角信息，单位°
+            </summary>
+            <param name="fltPa">phase A ，单位°</param>
+            <param name="fltPb">phase B ，单位°</param>
+            <param name="fltPc">phase C ，单位°</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.ClearWarning">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendWantN_C">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendWantStemC">
+            <summary>
+                获取标准表当前常数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommUIDownRapid">
+            <summary>
+                快速降下电压电流信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommOpen(System.Boolean)">
+            <summary>
+                开环，闭环
+            </summary>
+            <param name="bOpen">true：开环；false：闭环</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.GetStemCTheory(System.Single,System.Single)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="u">电压档位</param>
+            <param name="I">实际输出电流</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommChkZBegin">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommfs(System.Int32)">
+            发送脉冲类型
+            <summary>
+                0脉冲类型  1时钟  0电能
+            </summary>
+            <param name="value">1时钟  0电能</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommHarmonicContent(System.String[],System.String[])">
+            <summary>
+            </summary>
+            <param name="uContent">电压谐波含量，格式：XX,XX,XX；幅值,相位角度,系数</param>
+            <param name="content">电流谐波含量，格式：XX,XX,XX；幅值,相位角度,系数</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommHarmonicSet(EquipmentSet.HarmonicKind)">
+            <summary>
+            </summary>
+            <param name="harmonic"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommImin(System.Single,EquipmentSet.WorkPhaseI)">
+            <summary>
+            </summary>
+            <param name="fltI"></param>
+            <param name="workphase"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendEndCountStemN">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendStartCountStemN">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.SendCommVoltageDropBreak(EquipmentSet.WorkPhaseU,EquipmentSet.PtpNo,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+                电压跌落和终端
+            </summary>
+            <param name="workPhase">电压工作相别</param>
+            <param name="ptpno">制式</param>
+            <param name="breakTimes">中断/跌落次数</param>
+            <param name="voltagePercentage">中断/跌落电压, 额定电压的比例，单位：%</param>
+            <param name="dropTimes">中断/跌落时间, 单位ms</param>
+            <param name="recoveryTimes">两次中间电压恢复时间, 单位ms</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNZ2230.GetRangeUbI(System.Single)">
+            获取电压量程
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="curru">当前升起的电压</param>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentNZ2230.Stemc">
+            <summary>
+                标准表常数
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentNZ2230.SetSinglePhase">
+            TRUE:单相；FALSE：三相
+            <summary>
+                TRUE:单相；FALSE：三相
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentNZ2230.GclsCommSetSimulation">
+            是否模拟通讯
+            <summary>
+                是否模拟通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentNZ2230.HaveU">
+            是否有电压的标志
+            <summary>
+                是否有电压的标志
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentNZ2230.CancelSend">
+            取消发送
+            <summary>
+                取消发送
+            </summary>
+        </member>
+        <member name="E:EquipmentSet.EquipmentNZ2230.ShowMsgMdi">
+            <summary>
+                刷新代理方法
+            </summary>
+        </member>
+        <member name="E:EquipmentSet.EquipmentNZ2230.SendCurrentLoad">
+            <summary>
+                定义一个消息接收事件
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentNZ2230.CurrentVoltageDropBreakOK">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.ElecMotorOverTurn">
+            电机翻转动作[控制]
+            <summary>
+            电机翻转动作
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.停止控制">
+            <summary>
+            电机停止，指示灯恢复正常显示
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.打开按键控制">
+            <summary>
+            电机由按键控制
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.推表至直立位">
+            <summary>
+            电机推表至直立位（表必须全部压接）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.拉表回倾斜位">
+            <summary>
+            电机拉表回倾斜位（校验结束，表不能松）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.推表微调">
+            <summary>
+            电机推表微调
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.拉表微调">
+            <summary>
+            电机拉表微调
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.强制推表">
+            <summary>
+            电机强制推表（校准用）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorOverTurn.强制拉表">
+            <summary>
+            电机强制拉表（校准用）
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentStdHY5303C22">
+            <summary>
+                海盐HY5303C-22标准表
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.#ctor(System.String)">
+            海盐电子HY5303C22标准表通讯
+            <summary>
+                海盐电子HY5303C22三相标准表通讯
+            </summary>
+            <param name="portName"></param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.SendCommRangeNo(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <param name="rangeUb">输出电压实际量程</param>
+            <param name="rangeIb">输出电流实际量程</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.GetStemCTheory(System.Single,System.Single,EquipmentSet.PtpNo)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="voltage">电压档位V</param>
+            <param name="current">实际输出电流A</param>
+            <param name="ptpNo">制式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.GetRangeUb(System.Single)">
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="voltage">实际输出电压值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.SendCommfs(System.Int32)">
+            <summary>
+            标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdHY5303C22.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdHY5303C22.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.#ctor(System.String)">
+            南京电力自动化设备三厂有限公司DSB-301标准表通讯
+            <summary>
+                南京电力自动化设备三厂有限公司DSB-301标准表通讯
+            </summary>
+            <param name="portName"></param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=1，2，3，4，0, 8分别对应｛三四有功，三三有功，90度无功，60度无功，三四真无功，三三真无功｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.SendCommRangeNo(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <param name="rangeUb">输出电压实际量程</param>
+            <param name="rangeIb">输出电流实际量程</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.GetStemCTheory(System.Single,System.Single,EquipmentSet.PtpNo)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="voltage">电压档位V</param>
+            <param name="current">实际输出电流A</param>
+            <param name="ptpNo">制式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.GetRangeUb(System.Single)">
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="voltage">实际输出电压值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.SendCommfs(System.Int32)">
+            <summary>
+                标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB301.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdDSB301.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.IndustrialControlPower">
+            <summary>
+                电源箱控制模块
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.#ctor(System.String)">
+            <summary>
+            电源控制箱
+            </summary>
+            <param name="commport">通讯端口，例：COM1</param>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.SendCommArr(System.Byte[])">
+            串口发送
+            <summary>
+                串口发送
+            </summary>
+            <param name="arr">发送的报文</param>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.ConnectControlPower">
+            系统联机
+            <summary>
+                系统联机
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.IniControlPower">
+            系统初始化，切断所有电源，报警灯长绿
+            <summary>
+                系统初始化，切断所有电源，报警灯长绿
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.ControlPower(System.Boolean)">
+            受控电源状态控制
+            <summary>
+                受控电源状态控制，true：接通上电；false：断开电源
+            </summary>
+            <param name="open"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.ControlPower_GL(System.Byte)">
+            隔离电源状态控制，仅仅在耐压台和插卡装置上使用该命令
+            <summary>
+                隔离电源状态控制
+            </summary>
+            <param name="percent">0-0%，1-70%，2-100%，3-120%</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.ResetPower">
+            电源复位
+            <summary>
+                电源复位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.Lighten(System.Drawing.Color)">
+            点亮检验台的运行状态灯
+            <summary>
+                点亮检验台的运行状态灯
+                由供应商根据硬件实现方式保存灯的状态；在收到下一个状态变更命令前，要维持原有状态
+            </summary>
+            <param name="color">状态灯颜色，目前支持，Color.Red:红，Color.Green:绿，Color.Yellow:黄</param>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.Lighten(System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="color">  三色灯控制指令,0为开机默认绿灯亮，1：黄色，2：红色 ，3：蓝色</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.RemoveAlarm">
+            解除限位报警
+            <summary>
+                限位开关控制复位脉冲（100ms），解除限位报警
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.ReadAlarmInfo">
+            <summary>
+            读取报警信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.IndustrialControlPower.Lighten(System.Int32,System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="meterIndex">表位索引，从0开始</param>
+            <param name="color">  三色灯控制指令,0为开机默认绿灯亮，1：黄色，2：红色 ，3：蓝色</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.InitEmid(System.String)">
+            初始化表地址
+            <summary>
+                初始化表地址
+            </summary>
+            <param name="address">表地址，不超过12位</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.PrintMsg(System.Collections.Generic.IEnumerable{System.Byte},System.Byte)">
+            <summary>
+                打印
+            </summary>
+            <param name="arr">需要打印的字节数组</param>
+            <param name="add0X33">加0x33</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.Delay(System.Int64)">
+            <summary>
+                等待延时，但是不影响其他线程的操作。
+            </summary>
+            <param name="waittime"></param>
+        </member>
+        <member name="M:EquipmentSet.Function.Between(System.Int32,System.Int32,System.Int32)">
+            区域判断
+            <summary>
+                区域判断
+            </summary>
+            <param name="value">需要比较的数值</param>
+            <param name="up">最大值</param>
+            <param name="low">最小值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.CRC16(System.Byte[])">
+            CRC16算法，校验和
+            <summary>
+                CRC16算法，校验和
+            </summary>
+            <param name="data">需要计算的字节数组</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.GetCS(System.Byte[])">
+            <summary>
+                统计校验和
+            </summary>
+            <param name="buff">被统计的变量</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.GetCS(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+                统计校验和
+            </summary>
+            <param name="buff">被统计的变量</param>
+            <param name="istart">开始位置</param>
+            <param name="iend">结束位置，整个数组的全局位置</param>
+        </member>
+        <member name="M:EquipmentSet.Function.GetCS_PBCD(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+                将字节组装成PBCD码进行相加。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.ToHex(System.Int32)">
+            <summary>
+                转换为符合本程序的十六进制格式
+            </summary>
+            <param name="var">1 2 3</param>
+            <returns>返回十六进制字符串，如果是1-9的话，前面带零</returns>
+            <example>例如: 5  ="05"  12 ="0C" 无论何时，都是两位数。</example>
+        </member>
+        <member name="M:EquipmentSet.Function.GetItem(System.String,System.String,System.Int32)">
+            返回在字符串中指定索引值
+            <summary>
+                返回在字符串中指定索引值
+            </summary>
+            <param name="msg">取指定项的源值</param>
+            <param name="split">分隔符</param>
+            <param name="gIndex">第几项，若=-1时候，则为所有</param>
+            <example> GetItem("1A,5A,10A,20A",",",2) = "10A"</example>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.ReDimPreserve(System.Byte[]@,System.Byte)">
+            重新定义数组
+            <summary>
+                重新定义数组
+            </summary>
+            <param name="array">原来数组</param>
+            <param name="findbyte">找出第一个出现的字节，从后开始保留，前面全部抛弃</param>
+        </member>
+        <member name="M:EquipmentSet.Function.ReDimPreserve(System.Byte[]@,System.Int32,System.Int32)">
+            从一数组中，截取开始到结束的部分
+            <summary>
+                从一数组中，截取开始到结束的部分
+            </summary>
+            <param name="array">原来数组</param>
+            <param name="firstbyte">从此开始截取,从0开始</param>
+            <param name="count">截取字节的长度</param>
+        </member>
+        <member name="M:EquipmentSet.Function.ReDimPreserve(System.Byte[],System.Int32,System.Int32,System.Int32)">
+            (复制数组)从一数组中，截取开始到结束的部分,返回新的数组
+            <summary>
+                从一数组中，截取开始到结束的部分
+            </summary>
+            <param name="array">原来数组</param>
+            <param name="firstbyte">从此开始截取,从0开始</param>
+            <param name="add0X33">
+                若不进行加减处理，则该参数为0即可。
+                0x33为减，-0x33为加
+            </param>
+            <param name="count">截取的长度</param>
+        </member>
+        <member name="M:EquipmentSet.Function.PBCDStrBToValue(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+                将回传的数据，解析成pbcd码
+            </summary>
+            <param name="arr">需要解析的byte</param>
+            <param name="beginIndex">从第几个开始</param>
+            <param name="count">一共有多少个字节</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.ValuetoPBCDintoArrb(System.Double,System.Byte[]@,System.Int32,System.Int32)">
+            <summary>
+                将数值（10）进制，转换成16进制的pbcd码，并插入到相应的数组中。
+            </summary>
+            <param name="value">需要进行转换的值，double类型</param>
+            <param name="arr">需要插入的数组</param>
+            <param name="starno">从第几个开始插入，从0开始</param>
+            <param name="count">插入的字节长度</param>
+            <example>发送格式，若常数为18000000, 那么，对应格式来说（需要6个字节）,00 00 18 00 00 00 ，均为16进制, 则为：0x00,0x00,0x18,0x00,0x00,0x00</example>
+        </member>
+        <member name="M:EquipmentSet.Function.GetValueFromHEXStr(System.Byte[],System.Int32,System.Int32,System.Boolean)">
+            读取表计数据解码
+            <summary>
+                读取表计数据解码
+            </summary>
+            <param name="arr">待解码报文</param>
+            <param name="beginindex">从第几个索引开始（从0开始计）</param>
+            <param name="count">需要解码的长度</param>
+            <param name="upper">upper=true，从beginindex开始；upper=false，从beginindex+count开始减。</param>
+            <returns>根据除数，返回相应的数值。如：xx.xx</returns>
+            <example>arr分别为12 07 00 00，beginindex=0，count=4，upper=true,divisor =1000,那么为712/1000=0.712</example>
+        </member>
+        <member name="M:EquipmentSet.Function.EncodeDecToHex(System.Int64,System.Boolean)">
+            十进制转换为16进制数
+            <summary>
+                十进制转换为16进制数
+            </summary>
+            <param name="value">十进制值</param>
+            <param name="isLowFront">是否从低位开始</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.Function.EncodeDecToHex(System.Int64,System.Boolean,System.Int32)">
+            十进制转换为16进制数
+            <summary>
+                十进制转换为16进制数
+            </summary>
+            <param name="value">十进制值</param>
+            <param name="isLowFront">是否从低位开始</param>
+            <param name="formatLength">格式化长度</param>
+            <returns></returns>
+        </member>
+        <member name="T:EquipmentSet.EquipmentStdRD43">
+            <summary>
+                RD43通讯协议
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.#ctor(System.String)">
+            构造函数
+            <summary>
+                构造函数
+            </summary>
+            <param name="portName">系统通讯端口(默认为COM3)</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.ConnectSet">
+            联机,系统连接。
+            <summary>
+                联机,系统连接。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.Read_U">
+            <summary>
+                读电压
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.Read_I">
+            <summary>
+                读电流
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.Read_P">
+            <summary>
+                读功率
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.Read_F">
+            <summary>
+                读频率
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.Read_Phase">
+            <summary>
+                读相位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.SendCommArr(System.Byte[],System.Int32)">
+            <summary>
+                通用发送命令
+            </summary>
+            <param name="arr">发送的报文</param>
+            <param name="sendTimes">次数</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.DataReceived(System.Byte[])">
+            将接受的数据进行解析处理(系统通讯端口)
+            <summary>
+                将接受的数据进行解析处理
+            </summary>
+            <param name="commData">byte[],串口接受的数据进行解析</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD43.SendCommfs(System.Int32)">
+            <summary>
+                标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD43.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD43.SetSinglePhase">
+            true：单相；false：三相设备
+            <summary>
+                true：单相；false：三相设备
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD43.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD43.Stemc">
+            标准表常数（只读）
+            <summary>
+                标准表常数
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD43.HaveU">
+            当前设备是否有电压的标志
+            <summary>
+                当前设备是否有电压的标志
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.#ctor(System.String)">
+            南京电力自动化设备三厂有限公司DSB-301标准表通讯
+            <summary>
+                南京电力自动化设备三厂有限公司DSB-301标准表通讯
+            </summary>
+            <param name="portName"></param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=1，2，3，4，0, 8分别对应｛三四有功，三三有功，90度无功，60度无功，三四真无功，三三真无功｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.SendCommRangeNo(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <param name="rangeUb">输出电压实际量程</param>
+            <param name="rangeIb">输出电流实际量程</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.GetStemCTheory(System.Single,System.Single,EquipmentSet.PtpNo)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="voltage">电压档位V</param>
+            <param name="current">实际输出电流A</param>
+            <param name="ptpNo">制式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.GetRangeUb(System.Single)">
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="voltage">实际输出电压值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.SendCommfs(System.Int32)">
+            <summary>
+                标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdDSB101.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdDSB101.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentWc">
+            <summary>
+                误差板通讯类
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.#ctor(System.Int32,System.String)">
+            初始化误差板
+            <summary>
+                初始化误差板
+            </summary>
+            <param name="meternumbers">当前设备表位数量，不超过96</param>
+            <param name="wcPortname">通讯端口号，默认为COM4</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.#ctor">
+            <summary>
+            误差通讯类模块
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.ClosePort">
+            <summary>
+                关闭端口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.Finalize">
+            <summary>
+                析构函数
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wConnectCommSet">
+            联机误差板，包括每一个表位。
+            <summary>
+                联机误差板，包括每一个表位。
+            </summary>
+            <returns>"true"说明联机成功，否则失败</returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wAutoShutdown(EquipmentSet.FST_SND_LOOP)">
+            <summary>
+                自动短接,需要初始化IsVerify属性；
+            </summary>
+            <param name="fstSndLoop">主次回路</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wAutoShutdown(System.Int32,EquipmentSet.MeterStatus)">
+            <summary>
+                单个表位自动短接功能
+            </summary>
+            <param name="emno">表号，从0开始</param>
+            <param name="meterStatus">0:挂表；1:未挂表；2:次回路挂表；3:次回路未挂表</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommarr_ReadERR(System.Byte)">
+            <summary>
+                返回误差句柄
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数+误差</returns>
+            <example>例："01,07,+0.0121",表位，第1表位，做出的第7次误差，误差为+0.0121</example>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommarr_ReadPulse(System.Byte)">
+            <summary>
+                读取脉冲，时段投切时候用到
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数</returns>
+            <example>例："01,07",表位，第1表位，做出的第7个脉冲</example>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommarr_ZZ(System.Byte)">
+            <summary>
+                获取走字时候每个表位走字脉冲和标准表脉冲
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+表计脉冲个数+标准表脉冲</returns>
+            7
+            <example>例："01,1000,12003904",表位，第1表位，表走脉冲数，标准表脉冲数</example>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendOpenConnect(System.Byte)">
+            <summary>
+                连接误差板
+            </summary>
+            <param name="emno">表位，从1开始。</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommChkPEnd">
+            <summary>
+                当前校验点结束，切换至HELLO状态。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommChkPBegin">
+            <summary>
+                开始校验,误差计算器开始工作。
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendParas(System.Int32[],System.Double,System.Byte,System.Boolean,System.Byte,System.Int32)">
+            综合发送误差板参数
+            <summary>
+                综合发送误差板参数
+            </summary>
+            <param name="meterC">每一个表位的常数数组。</param>
+            <param name="fcoe">分频系数(1-10000000)</param>
+            <param name="chkR">校验圈数，不超过99</param>
+            <param name="direction">false反向  true正向</param>
+            <param name="chanel">P+:0,P-:2,Q+:3,Q-:1,CLK+:5,CLK-:4,高频:6</param>
+            <param name="chkType">
+                value=07,电能误差试验;
+                value=08,日计时误差试验;
+                value=09,需量周期误差试验;
+                value=10,电能走字试验;
+                value=11,电表潜动试验;
+                value=12,电表启动试验;
+                value=13,电表捕黑试验;
+                value=14,常数校核试验;
+                value=15,定数走字试验.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommSTEMC(System.Int64)">
+            <summary>
+                发送标准表常数。
+            </summary>
+            <param name="stemc">标准表常数</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommEMC(System.Int32[],System.Int32)">
+            <summary>
+                发送被检表常数
+            </summary>
+            <param name="meterC">每一个表位的常数，可能会出现不同的常数，所以用数组。</param>
+            <param name="currfcoe">当前的分频系数,默认为1</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommEMC(System.Int32[])">
+            <summary>
+                发送被检表常数
+            </summary>
+            <param name="meterC">每一个表位的常数，可能会出现不同的常数，所以用数组。</param>
+            <param name="currfcoe">当前的分频系数,默认为1</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommFcoe(System.Double)">
+            <summary>
+                分频系数
+            </summary>
+            <param name="fcoe">分频系数，double</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommFcoeNeedt(System.Int32)">
+            倍频设置：需量周期滑差时间
+            <summary>
+                倍频设置：需量周期滑差时间，单位：秒
+            </summary>
+            <param name="second">滑差时间，单位：秒</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommN(System.Byte)">
+            <summary>
+                校验圈数，不超过99
+            </summary>
+            <param name="chkR">不超过99</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommPulseType(System.Boolean)">
+            <summary>
+                校验脉冲方式
+            </summary>
+            <param name="direction">false反向  true正向</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendOpenPulseChanel(System.Byte,System.Byte)">
+            <summary>
+                自动脉冲切换
+            </summary>
+            <param name="emno">99H群发，否则发送单表位,从1开始</param>
+            <param name="chanel">P+:0,P-:2,Q+:3,Q-:1,CLK+:5,CLK-:4,高频:6</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommChkType(System.Int32)">
+            <summary>
+                设置校表模式
+            </summary>
+            <param name="value">
+                value=07,电能误差试验;
+                value=08,日计时误差试验;
+                value=09,需量周期误差试验;
+                value=10,电能走字试验;
+                value=11,电表潜动试验;
+                value=12,电表启动试验;
+                value=13,电表捕黑试验;
+                value=14,常数校核试验;
+                value=15,定数走字试验.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendOpenCloseUChanel(System.Byte,System.Byte)">
+            <summary>
+                改造误差板，即97表位，在此次方案中，可能不需要使用该方法。
+                把跳闸检测误差板接入电流回路
+                电压通断命令,1为通，0为断
+            </summary>
+            <param name="emno">当前表位,从1开始</param>
+            <param name="openin">0 为不接入，1为接入 </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendOpenCloseIChanel(System.Byte,System.Byte)">
+            <summary>
+                电流通断命令,1为闭和，0为断；（磁保持继电器 ）
+            </summary>
+            <param name="emno">当前表位,从1开始</param>
+            <param name="openin">0为闭和,电流走表内 ; 1为断,电流走误差板</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendControlWCColor(System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="color">  三色灯控制指令,0为开机默认全灭状态，1绿灯亮，2Color.Red ，3Color.Green</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendUCheck(System.Int32,System.Int32)">
+            <summary>
+                电压检测切换指令 电压检测切换指令,0为开机默认闸门电压检测状态,1为表位电流开路电压检测状态， CheckU  = 0，默认为电压闸门检测状态
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="chku">
+                0为开机默认闸门电压检测状态,21为表位带电流检测，11为不带电流的检测. 1)0为开机默认闸门电压检测状态；
+                2)1为表位电流开路电压检测状态（1为A相，2为B相，3为C相，单相仅1有效）；3)s低位为0时为开机默认闸门电压检测状态（外跳检测），高位也为0；4)s高位为1时带延时的自动合闸，主要用于无电流的开路检测；
+                5)s高位为2时为无延时自动短路，主要用于有电流跳闸试验（0x21等）；6)配合查询指令0xa4 sa一起使用。
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReUCheck(System.Int32)">
+            获取跳闸状态,SJJ2010设备类型有效
+            <summary>
+                获取跳闸状态,SJJ2010设备类型有效
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <returns>true：表示跳闸或者表开路；false：表示正常状态</returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReAlarmCheck(System.Int32,EquipmentSet.IntelligenceType,EquipmentSet.WarningType)">
+            <summary>
+                获取报警状态（三相）
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="inttell">跳闸类型</param>
+            <param name="warning">报警方式</param>
+            <returns>true：表示跳闸或者表开路；false：表示正常状态</returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReadErr(System.Byte,System.Byte)">
+            <summary>
+                读取误差值
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="pkind">
+                pkind =0,读取误差，表位+次数+误差；
+                pkind =1,读取日计时误差，表位+次数+误差；
+                pkind =2,读取需量周期误差，表位+次数+误差；
+                pkind =3,读取走字试验误差，表位+被检表脉冲数+标频脉冲数；
+                pkind =4,读取潜动试验误差，表位+脉冲个数；
+                pkind =5,读取启动误差，表位+脉冲个数；
+                pkind =8,读取脉宽测试试验误差，表位+次数+误差；
+                pkind =11,读取常数效核试验误差，表位+被检表常数+true/false；
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.SendCommarr05(System.Byte[],System.Int32,System.Boolean)">
+            <summary>
+                串口发送
+            </summary>
+            <param name="arr">发送的报文</param>
+            <param name="sendTimes">发送次数</param>
+            <param name="withoutReceived">true表示无返回数据，false表示有返回数据</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.DataReceived05(System.Byte[])">
+            数据解码
+            <summary>
+                数据解码(误差口)
+            </summary>
+            <param name="commData">byte，串口字节数据</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReUCheck(System.Int32,EquipmentSet.IntelligenceType)">
+            <summary>
+                获取跳闸状态
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="inttell"></param>
+            <returns>true：表示跳闸或者表开路；false：表示正常状态</returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendCommUChange(System.Int32,System.Int32)">
+            <summary>
+            电压接线切换指令
+            </summary>
+            <param name="emno">表位号 ，PBCD码，从0开始</param>
+            <param name="status">1：1+3接线，0：3+4接线</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wLatentStart">
+            <summary>
+                潜动开始
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wReadLatentPulse(System.Int32)">
+            <summary>
+                读取潜动脉冲
+            </summary>
+            <param name="meterIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendMPulsef(System.Byte,System.Int32,System.Int32,System.Int32)">
+            8路脉冲输出
+            <summary>
+                8路脉冲输出
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <param name="chanel">设置第几路脉冲，可设为第0-7，即第1路至第8路</param>
+            <param name="mcycle">设置脉冲周期，单位为mS,最小值为2。 0输出高电平,1输出低电平</param>
+            <param name="mcNums">设置脉冲个数，0无输出, 4294967295持续输出</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendMKSignal(System.Byte,System.Int32)">
+            输出门控信号
+            <summary>
+                输出门控信号
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <param name="status">status=0 输出断开信号；status=1 输出闭合信号；</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendBegin_End_YaoCe(System.Byte,System.Int32)">
+            开始\结束遥测
+            <summary>
+                开始\结束遥测
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <param name="status">status=10 开始遥测；status=12 结束遥测</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSend_Get_YaoCe(System.Byte)">
+            查询遥测
+            <summary>
+                查询遥测
+            </summary>
+            <param name="emno">表位号，1-96</param>
+            <returns>
+                B8 ad 11 11 da0-da7,bj CS
+                da0-da7为遥测状态值,bj为报警状态值；
+                a0-da7,bj展开为二进制代码D7-D0, D2位表示初状态,
+                D1位表示变位状态（0无变位，1有变位），D0位表示当前	状态（0表示闭合，1表示断开）；
+            </returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendSwitchTml485Channel(System.Byte,System.Int32)">
+            抄表1，抄表2切换
+             <summary>
+             抄表1，抄表2切换
+             </summary>
+             <param name="emno">表位号，1-96</param>
+             <param name="status">status=0 切换抄表1；status=1 切换抄表2；</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendWorkModel(System.Byte,System.Int32)">
+            通讯模块工作模式
+             <summary>
+             通讯模块工作模式
+             </summary>
+             <param name="emno">表位号，1-96</param>
+             <param name="status">status=0 第一路485通讯模块工作于分布式模式；status=1 第一路485通讯模块工作于模拟表模式；</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendGHtest(System.Boolean)">
+            <summary>
+            开始功耗检测
+            </summary>
+            <param name="begin">true：开始检测，false：检测结束</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReadGH(System.Byte)">
+            读取功耗测试数据
+            <summary>
+                读取功耗测试数据
+            </summary>
+            <param name="emno">表位号，从1开始</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendFeeCardSwitch(System.Byte,System.Byte)">
+            插卡切换命令
+            <summary>
+                插卡切换命令
+            </summary>
+            <param name="emno">表位号，从1开始</param>
+            <param name="cardchanel">0为空卡，1-6分别对应各种费控卡</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendElectricMotorPressure(System.Int32,EquipmentSet.ElecMotorPressure)">
+            电机压接动作,误差板控制
+            <summary>
+            电机压接动作,误差板控制
+            </summary>
+            <param name="emno">误差板号，从1开始</param>
+            <param name="emp">电机压接动作</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendElectricMotorPressure(System.Int32,System.Int32,EquipmentSet.ElecMotorPressure)">
+            电机压接动作,误差板控制
+            <summary>
+            电机压接动作,误差板控制
+            </summary>
+            <param name="setRows">行数</param>
+            <param name="setCols">每行多少表位数量</param>
+            <param name="emp">电机压接动作</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendElectricMotorOverturn(System.Byte,EquipmentSet.ElecMotorOverTurn)">
+            电机翻转动作,0x91-0x94误差板控制
+            <summary>
+            电机翻转动作,0x91-0x94误差板控制
+            </summary>
+            <param name="emno">误差板号，从91开始</param>
+            <param name="emot">翻转动作</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReadElecMotorPresssureStatus(System.Byte,EquipmentSet.ElecMotorPressureStatus@)">
+            电机压接动作,1-96(60)误差板，读取其状态
+            <summary>
+            电机压接动作,1-96(60)误差板，读取其状态
+            </summary>
+            <param name="emno">误差板号，从1开始</param>
+            <param name="emps">压接后状态，请参考ElecMotorPressureStatus枚举</param> 
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReadElecMotorOverturnStatus(System.Byte,EquipmentSet.ElecMotorOverTurnStatus@)">
+            点击翻滚动作后，读取0x91-0x94误差板的状态
+            <summary>
+            点击翻滚动作后，读取0x91-0x94误差板的状态
+            </summary>
+            <param name="emno">误差板号，从91开始</param>
+            <param name="emots">翻滚后状态，详情参考 ElecMotorOverTurnStatus 枚举</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendOpen485Chanels(System.Boolean)">
+            打开第一路or第二路485通道
+            <summary>
+                打开第一路or第二路485通道
+            </summary>
+            <param name="firstChanel">true：第一路；false：第二路</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendOpen485Chanels(System.Byte,System.Boolean)">
+            <summary>
+                打开、关闭485通道
+            </summary>
+            <param name="curremno">表位，从1开始。若为0x99，则为广播，对所有表位有效</param>
+            <param name="open485">true:打开，false:关闭</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendOpen485Chanels(EquipmentSet.SetConnector)">
+            <summary>
+                切换到485通讯模式
+            </summary>
+            <param name="setConnector">总线式，分布式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendTransData(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            <summary>
+                透明转发
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="arr">是需要发送到表计的一个完整命令\r</param>
+            <example>例：如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16</example>
+            <param name="set485Chanels">1：第一路485；2：第二路485；3：两路同时发送（虚拟双ARM通讯）</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReadTransData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                读取透明转发的数据
+            </summary>
+            <param name="emno">读取透明转发的数据</param>
+            <param name="set485Chanels">first485==1，采用第一轮485进行通讯</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wGet_Send_Base_Info(EquipmentSet.set485Chanels,System.Int32,System.Int32,System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>
+                分布式读取表地址，或者用来给误差板下发当前表位的【表地址】
+            </summary>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <param name="emno">表位，从1开始</param>
+            <param name="dlt">0：自动获取，1：97协议，2：07协议</param>
+            <param name="baudrate">1.300，2.600，3.1200，4.2400，5.4800，6.9600，7.19200</param>
+            <param name="gaddress"> 表地址，当地址均为 0 时，系统自动读取地址；地址不为0时候，默认为PC下发表地址给误差板</param>
+            <param name="delaytimes">表示等待延时的时间，例：发送50，实际为50*10</param>
+            <param name="delaytimes2">示每次回传的字节之间的间隔，例：发送5，实际为5*10</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendReadBaseInfoData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                分布式获取表地址
+                同Get_Send_Base_Info方法一起使用。
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.wSendTransDataSimple(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            <summary>
+                简单协议解析
+                在使用该方法时候，需要先调用Get_Send_Base_Info的方法，否则不可使用。
+            </summary>
+            <param name="emno">表位信息，从1开始</param>
+            <param name="arr">
+                标准645协议中，从第二个68开始，到cs结束（不包括cs）
+                Arr()，是需要发送到表计的一个完整命令，如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16
+                在该命令中，只要发送14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33一段即可，但是前提是需要把表地址先发送给误差板
+            </param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.Lighten(System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="color">  三色灯控制指令,0为开机默认全灭状态，1绿灯亮，2Color.Red ，3Color.Green</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentWc.Lighten(System.Int32,System.Drawing.Color,System.Boolean)">
+            <summary>
+                误差板上三色指示灯控制，指的是 每一个误差板 上面的几个指示灯
+            </summary>
+            <param name="meterIndex">表位索引，从0开始</param>
+            <param name="color">  三色灯控制指令,0为开机默认绿灯亮，1：黄色，2：红色 ，3：蓝色</param>
+            <param name="flicker">闪烁标志，true表示闪烁，false表示常亮</param>
+            <returns></returns>
+        </member>
+        <member name="E:EquipmentSet.EquipmentWc.ShowMsgMdi">
+            <summary>
+                数据刷新到窗体界面
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentWc.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentWc.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentWc.Meter485Status">
+            在总线式485进行通讯时候，记录当前表位打开关闭的状态（0-关，1-通）（只读）
+            <summary>
+                在总线式485进行通讯时候，记录当前表位打开关闭的状态（0-关，1-通）
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentWc.IsVerify">
+            当前表位选中的标志
+            <summary>
+                当前表位选中的标志,true:表示选中;false:表示未选表计,对应wAutoShutDown使用
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentWc.SetMeterNums">
+            表位数量
+            <summary>
+                表位数量
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentStdRD31">
+            <summary>
+                RD43通讯协议
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.#ctor(System.String)">
+            构造函数
+            <summary>
+                构造函数
+            </summary>
+            <param name="portName">系统通讯端口(默认为COM3)</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.ConnectSet">
+            联机,系统连接。
+            <summary>
+                联机,系统连接。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.Read_U">
+            <summary>
+                读电压
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.Read_I">
+            <summary>
+                读电流
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.Read_P">
+            <summary>
+                读功率
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.Read_F">
+            <summary>
+                读频率
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.Read_Phase">
+            <summary>
+                读相位
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.SendCommArr(System.Byte[],System.Int32)">
+            <summary>
+                通用发送命令
+            </summary>
+            <param name="arr">发送的报文</param>
+            <param name="sendTimes">次数</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.DataReceived(System.Byte[])">
+            将接受的数据进行解析处理(系统通讯端口)
+            <summary>
+                将接受的数据进行解析处理
+            </summary>
+            <param name="commData">byte[],串口接受的数据进行解析</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdRD31.SendCommfs(System.Int32)">
+            <summary>
+            标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD31.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD31.SetSinglePhase">
+            true：单相；false：三相设备
+            <summary>
+                true：单相；false：三相设备
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD31.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD31.Stemc">
+            标准表常数（只读）
+            <summary>
+                标准表常数
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdRD31.HaveU">
+            当前设备是否有电压的标志
+            <summary>
+                当前设备是否有电压的标志
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.TemperatureHumidity">
+            <summary>
+                温湿度控制模块
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.TemperatureHumidity.#ctor(System.String)">
+            <summary>
+                构造函数
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.TemperatureHumidity.ReadWSD(System.Int32)">
+            读取温湿度
+            <summary>
+                读取温湿度
+            </summary>
+            <param name="address">通讯地址</param>
+            <returns>温度、湿度</returns>
+        </member>
+        <member name="T:EquipmentSet.EquipmentStdGenySZ03AK6">
+            <summary>
+            广州格林电子SZ03AK6标准表通讯
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.#ctor(System.String)">
+            广州格林电子SZ03AK6标准表通讯
+            <summary>
+                广州格林电子SZ03AK6三相标准表通讯
+            </summary>
+            <param name="portName"></param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.SendCommChkSet(System.Boolean,EquipmentSet.PtpNo)">
+            装置校验设置信息(初始化)
+            <summary>
+                装置校验设置信息(初始化
+            </summary>
+            <param name="setPhaseOrder">SetPhaseOrder=true,正相序，false 逆相序</param>
+            <param name="ptpNO">PtpNO=0，1，2，3，4，5，6，7，8分别对应｛单有，单无，三三有，三三无，三四有，三四无，三四真无，三三真无｝</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.SendCommRangeNo(System.Single,System.Single,System.Single@,System.Single@)">
+            <summary>
+                发送设备电压电流量程信息
+            </summary>
+            <param name="voltage">额定电压，0-380，单位V</param>
+            <param name="current">基准电流，0-100A（注意：小于0.05A，则按照0.05来做基准电流）</param>
+            <param name="rangeUb">输出电压实际量程</param>
+            <param name="rangeIb">输出电流实际量程</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.GetStemCTheory(System.Single,System.Single,EquipmentSet.PtpNo)">
+            根据当前电压电流信息，获取标准表常数
+            <summary>
+                根据当前电压电流信息，获取标准表常数
+            </summary>
+            <param name="voltage">电压档位V</param>
+            <param name="current">实际输出电流A</param>
+            <param name="ptpNo">制式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.GetRangeIb(System.Single)">
+            设备只有4个档位，部分设备有5个档位。
+            <summary>
+                设备只有4个档位，部分设备有5个档位。
+            </summary>
+            <param name="curri">单位A</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.GetRangeUb(System.Single)">
+            <summary>
+                获取电压量程
+            </summary>
+            <param name="voltage">实际输出电压值</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.SendCommfs(System.Int32)">
+            <summary>
+            标频时钟切换
+            </summary>
+            <param name="value">0：标频；1：时钟</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentStdGenySZ03AK6.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.EquipmentStdGenySZ03AK6.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentMeterDistributedCommunication">
+            <summary>
+                分布式独立485通讯，每个表位一个独立485串口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.#ctor(System.Collections.Generic.IList{System.String},System.String)">
+            初始化误差板
+            <summary>
+                初始化误差板
+            </summary>
+            <param name="portname">通讯端口号，默认为COM4</param>
+            <param name="bautes">通讯波特率，格式：2400,E,8,1</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.ClosePort">
+            <summary>
+                关闭端口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.Finalize">
+            <summary>
+                析构函数
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendOpen485Chanels(System.Boolean)">
+            打开第一路or第二路485通道
+            <summary>
+                打开第一路or第二路485通道
+            </summary>
+            <param name="firstChanel">true：第一路；false：第二路</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendOpen485Chanels(System.Byte,System.Boolean)">
+            <summary>
+                打开、关闭485通道
+            </summary>
+            <param name="curremno">表位，从1开始。若为0x99，则为广播，对所有表位有效</param>
+            <param name="open485">true:打开，false:关闭</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendOpen485Chanels(EquipmentSet.SetConnector)">
+            <summary>
+                切换到485通讯模式
+            </summary>
+            <param name="setConnector">总线式，分布式</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendTransData(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            <summary>
+                透明转发
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="arr">是需要发送到表计的一个完整命令\r</param>
+            <example>例：如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16</example>
+            <param name="set485Chanels">1：第一路485；2：第二路485；3：两路同时发送（虚拟双ARM通讯）</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendReadTransData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                读取透明转发的数据
+            </summary>
+            <param name="emno">读取透明转发的数据</param>
+            <param name="set485Chanels">first485==1，采用第一轮485进行通讯</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wGet_Send_Base_Info(EquipmentSet.set485Chanels,System.Int32,System.Int32,System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>
+                分布式读取表地址，或者用来给误差板下发当前表位的【表地址】
+            </summary>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <param name="emno">表位，从1开始</param>
+            <param name="dlt">0：自动获取，1：97协议，2：07协议</param>
+            <param name="baudrate">1.300，2.600，3.1200，4.2400，5.4800，6.9600，7.19200</param>
+            <param name="gaddress"> 表地址，当地址均为 0 时，系统自动读取地址；地址不为0时候，默认为PC下发表地址给误差板</param>
+            <param name="delaytimes">表示等待延时的时间，例：发送50，实际为50*10</param>
+            <param name="delaytimes2">示每次回传的字节之间的间隔，例：发送5，实际为5*10</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendReadBaseInfoData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                分布式获取表地址
+                同Get_Send_Base_Info方法一起使用。
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendTransDataSimple(System.Int32,System.Byte[],EquipmentSet.set485Chanels)">
+            <summary>
+                简单协议解析
+                在使用该方法时候，需要先调用Get_Send_Base_Info的方法，否则不可使用。
+            </summary>
+            <param name="emno">表位信息，从1开始</param>
+            <param name="arr">
+                标准645协议中，从第二个68开始，到cs结束（不包括cs）
+                Arr()，是需要发送到表计的一个完整命令，如：68 1 0 0 0 2 0 68 14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33 16 16
+                在该命令中，只要发送14 12 34 37 33 37 37 44 44 44 44 44 44 44 34 33 33 33 35 33一段即可，但是前提是需要把表地址先发送给误差板
+            </param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommChkPEnd">
+            <summary>
+                当前校验点结束，切换至HELLO状态。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommChkType(System.Int32)">
+            <summary>
+                设置校表模式
+            </summary>
+            <param name="value">
+                value=07,电能误差试验;
+                value=08,日计时误差试验;
+                value=09,需量周期误差试验;
+                value=10,电能走字试验;
+                value=11,电表潜动试验;
+                value=12,电表启动试验;
+                value=13,电表捕黑试验;
+                value=14,常数校核试验;
+                value=15,定数走字试验.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommN(System.Byte)">
+            <summary>
+                校验圈数，不超过99
+            </summary>
+            <param name="chkR">不超过99</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommPulseType(System.Boolean)">
+            <summary>
+                校验脉冲方式
+            </summary>
+            <param name="direction">false反向  true正向</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendOpenPulseChanel(System.Byte,System.Byte)">
+            <summary>
+                自动脉冲切换
+            </summary>
+            <param name="emno">99H群发，否则发送单表位,从1开始</param>
+            <param name="chanel">P+:0,P-:2,Q+:3,Q-:1,CLK+:5,CLK-:4,高频:6</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommEMC(System.Int32[],System.Int32)">
+            <summary>
+                发送被检表常数
+            </summary>
+            <param name="meterC">每一个表位的常数，可能会出现不同的常数，所以用数组。</param>
+            <param name="currfcoe">当前的分频系数,默认为1</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommarr_ReadERR(System.Byte)">
+            <summary>
+                返回误差句柄
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数+误差</returns>
+            <example>例："01,07,+0.0121",表位，第1表位，做出的第7次误差，误差为+0.0121</example>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommChkPBegin">
+            <summary>
+                开始校验,误差计算器开始工作。
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentMeterDistributedCommunication.wSendCommarr_ReadPulse(System.Byte)">
+            <summary>
+                读取脉冲，时段投切时候用到
+            </summary>
+            <param name="curremno">表位，从1开始</param>
+            <returns>返回为：表位+次数</returns>
+            <example>例："01,07",表位，第1表位，做出的第7个脉冲</example>
+        </member>
+        <member name="P:EquipmentSet.EquipmentMeterDistributedCommunication.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.SerialPortDistributedCommunication">
+            <summary>
+                独立485通讯类模块
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.SerialPortDistributedCommunication.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+                独立485通讯类模块
+            </summary>
+            <param name="portName">端口号，格式:COM4等</param>
+            <param name="bauteLv">波特率，格式：2400,E,8,1</param>
+            <param name="meterIndex">表位号，从0开始</param>
+        </member>
+        <member name="M:EquipmentSet.SerialPortDistributedCommunication.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.SerialPortDistributedCommunication.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.SerialPortDistributedCommunication._sp_DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+            托管处理接受到的应答报文
+            <summary>
+                托管处理接受到的应答报文
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:EquipmentSet.SerialPortDistributedCommunication.Send(System.Byte[])">
+            <summary>
+                发送报文函数
+            </summary>
+            <param name="sendbuff">发送报文内容</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.SerialPortDistributedCommunication.Send(System.Collections.Generic.List{System.Byte})">
+            <summary>
+                发送报文函数
+            </summary>
+            <param name="sendbuff">发送报文内容</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.SerialPortDistributedCommunication.Send(System.String)">
+            <summary>
+                发送报文函数
+            </summary>
+            <param name="sendbuff">发送报文内容</param>
+            <returns></returns>
+        </member>
+        <member name="P:EquipmentSet.SerialPortDistributedCommunication.MeterIndex">
+            <summary>
+                表位号，从0开始
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SerialPortDistributedCommunication.ReceivedBuff">
+            <summary>
+                获取的数据缓存
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.AssistantEquipmentWC">
+            <summary>
+            独立误差-485通讯
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.#ctor(System.Int32,System.String)">
+            初始化误差板
+            <summary>
+                初始化误差板
+            </summary>
+            <param name="meternumbers">当前设备表位数量，不超过96</param>
+            <param name="wcPortname">通讯端口号，默认为COM4</param>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.Close">
+            关闭端口
+            <summary>
+                关闭端口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.ClosePort">
+            <summary>
+                关闭端口
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.Finalize">
+            <summary>
+                析构函数
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.wSendOpen485Chanels(EquipmentSet.SetConnector)">
+            <summary>
+                切换到485通讯模式
+            </summary>
+            <param name="setConnector">总线式，分布式</param>
+            <returns></returns>  
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.wSendReadBaseInfoData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                分布式获取表地址
+                同Get_Send_Base_Info方法一起使用。
+            </summary>
+            <param name="emno">表位，从1开始</param>
+            <param name="set485Chanels">1：第一路485；2：第二路485</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.wSendReadTransData(System.Int32,EquipmentSet.set485Chanels)">
+            <summary>
+                读取透明转发的数据
+            </summary>
+            <param name="emno">读取透明转发的数据</param>
+            <param name="set485Chanels">first485==1，采用第一轮485进行通讯</param>
+            <returns></returns>
+        </member>
+        <member name="M:EquipmentSet.AssistantEquipmentWC.DataReceived05(System.Byte[])">
+            数据解码
+            <summary>
+                数据解码(误差口)
+            </summary>
+            <param name="commData">byte，串口字节数据</param>
+        </member>
+        <member name="E:EquipmentSet.AssistantEquipmentWC.OnInfo">
+            <summary>
+                数据刷新到窗体界面
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.AssistantEquipmentWC.CancelSend">
+            取消发送的标识
+            <summary>
+                取消发送的标识
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.AssistantEquipmentWC.GclsCommSetSimulation">
+            true：表示模拟通讯，否则真实通讯
+            <summary>
+                true：表示模拟通讯，否则真实通讯
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.AssistantEquipmentWC.Meter485Status">
+            在总线式485进行通讯时候，记录当前表位打开关闭的状态（0-关，1-通）（只读）
+            <summary>
+                在总线式485进行通讯时候，记录当前表位打开关闭的状态（0-关，1-通）
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.AssistantEquipmentWC.IsVerify">
+            当前表位选中的标志
+            <summary>
+                当前表位选中的标志,true:表示选中;false:表示未选表计,对应wAutoShutDown使用
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.AssistantEquipmentWC.SetMeterNums">
+            <summary>
+                表位数量
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.Pulse">
+            <summary>
+                脉冲类型,正向有功等……
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.SetMonitor">
+            <summary>
+                监视表数据
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.SetMonitor.#ctor">
+            <summary>
+            监视表
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.Alarm">
+            报警内容
+            <summary>
+                报警内容
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.AngleLinePhase">
+            <summary>
+                线相位。分别对应：Φ12,Φ23,Φ31
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.QTotal">
+            <summary>
+                无功总功率
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.PsTotal">
+            <summary>
+                视在功率
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.PTotal">
+            <summary>
+                总有功功率
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.U">
+            <summary>
+            电压，单位：V
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.I">
+            <summary>
+            电流，单位：A
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.P">
+            <summary>
+            分相有功功率，单位：W
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.Q">
+            <summary>
+            分相无功功率，单位：var
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.Angle">
+            <summary>
+            分相相位角，单位：°
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.Freq">
+            <summary>
+            频率，单位：Hz
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.Ps">
+            <summary>
+            实在功率，单位：w
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.Cos">
+            <summary>
+            有功功率因数
+            </summary>
+        </member>
+        <member name="P:EquipmentSet.SetMonitor.Sin">
+            <summary>
+            无功功率因数
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.HarmonicKind">
+            <summary>
+            谐波类型
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.HarmonicKind.标准信号">
+            <summary>
+            标准信号(正弦波)
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.HarmonicKind.偶谐波">
+            <summary>
+            半波整流(直流和偶次谐波, 只有正半周)
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.HarmonicKind.奇次谐波">
+            <summary>
+            相位触发控制(奇次谐波, 正半周90°-180°,负半周270°-360°)
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.HarmonicKind.次谐波">
+            <summary>
+            波群控制(次谐波, 2周为正弦波, 2周为零)
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.EquipmentNy">
+            <summary>
+                控制耐压仪表
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNy.Dispose">
+            关闭对象
+            <summary>
+                关闭对象
+            </summary>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNy.SendCommU(System.String)">
+            <summary>
+                发送测试电压，不超过4.999kV
+            </summary>
+            <param name="u">格式为X.XXX</param>
+        </member>
+        <member name="M:EquipmentSet.EquipmentNy.SendChkpTime(System.String)">
+            <summary>
+                发送耐压测试时间
+            </summary>
+            <param name="seconds">单位：秒，格式:XXX.X</param>
+        </member>
+        <member name="T:EquipmentSet.StandardScale">
+            <summary>
+            标准表
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.DSB101">
+            <summary>
+            dsb，南自三厂标准表系列
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.DSB301">
+            <summary>
+            三相标准表
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.ZeraRMM3000">
+            <summary>
+            德国Zera公司系列RMM3000型号标准表
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.RD43">
+            <summary>
+            美国RD系列标准表
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.SZ03AK6">
+            <summary>
+            广州格林电气三相标准表（仅北京使用）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.MDP2002A">
+            <summary>
+            郑州三晖电气三相标准表（仅北京使用 ）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.HY5303C22">
+            <summary>
+            海盐电子通讯三相标准表(仅北京使用)
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.StandardScale.RD3X">
+            <summary>
+            美国RD 3系列标准表
+            </summary>
+        </member>
+        <member name="T:EquipmentSet.ElecMotorPressure">
+            压接电机[控制]
+            <summary>
+            压接电机控制,91-94号误差板控制,每个误差板对应15个表位点击动作\r
+            91号控制1-15表位，依次类推
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.停止控制">
+            <summary>
+            电机停止，指示灯恢复正常显示
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.打开按键控制">
+            <summary>
+            电机由按键控制
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.下行自动压表">
+            <summary>
+            电机下行自动压表（必须在倾斜位置）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.上行松表">
+            <summary>
+            电机上行松表（必须在倾斜位置）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.下行键微控">
+            <summary>
+            电机下行键控微调
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.上行键微控">
+            <summary>
+            电机上行键控微调
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.强制下行">
+            <summary>
+            电机强制下行（校准用）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.强制上行">
+            <summary>
+            电机强制上行（校准用）
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.电机下行耐压位置">
+            <summary>
+            电机下行到耐压位置	,山东济南自动压接台体有此功能
+            </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.耐压下行压表">
+             <summary>
+            电机由耐压位置下行到校表位置,山东济南自动压接台体有此功能
+             </summary>
+        </member>
+        <member name="F:EquipmentSet.ElecMotorPressure.耐压上行松表">
+            <summary>
+            电机由耐压位置上行到松表位置,山东济南自动压接台体有此功能
+            </summary>
+        </member>
+    </members>
+</doc>
