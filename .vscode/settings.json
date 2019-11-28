@@ -1,3 +1,10 @@
 {
-    "python.pythonPath": "venv\\Scripts\\python.exe"
+   "python.pythonPath": "venv\\Scripts\\python.exe",
+   "python.venvPath": "c:\\python373",
+   "python.venvFolders": [
+      "python373"
+   ]
+
+   
+
 }
